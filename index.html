@@ -29,21 +29,16 @@
       --ease-entrance:       cubic-bezier(0.2, 0, 0, 1);
     }
 
-    /* ============================================================
-       FULLPAGE: bloqueamos el scroll nativo del documento
-       ============================================================ */
     html, body {
       margin: 0;
       padding: 0;
       width: 100%;
       height: 100%;
-      overflow: hidden;                /* el documento NO hace scroll nativo */
+      overflow: hidden;
       overscroll-behavior: none;
-      scrollbar-width: none;           /* Firefox */
+      scrollbar-width: none;
     }
-    html::-webkit-scrollbar, body::-webkit-scrollbar {
-      display: none;                   /* Chrome / Safari */
-    }
+    html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; }
 
     body {
       font-family: "Onest", sans-serif;
@@ -304,15 +299,16 @@
     .word-span { display: inline-block; opacity: 0; will-change: opacity, transform; }
 
     /* ============================================================
-       SECCIÓN 2 — RECURSOS
+       SECCIÓN 2 — RECURSOS (con scroll interno)
        ============================================================ */
     .recursos-section {
       background: var(--hero-base);
       text-align: center;
-      padding: 5rem 1.25rem;
-    }
-    @media (min-width: 640px) {
-      .recursos-section { padding: 5rem 2.5rem; }
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
     }
 
     .recursos-section::before {
@@ -327,6 +323,29 @@
         transparent 75%);
     }
 
+    /* Contenedor scrollable de la sección 2 */
+    .recursos-scroll {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.2) transparent;
+      padding: 4rem 1.25rem 5rem;
+      -webkit-overflow-scrolling: touch;
+    }
+    .recursos-scroll::-webkit-scrollbar { width: 6px; }
+    .recursos-scroll::-webkit-scrollbar-track { background: transparent; }
+    .recursos-scroll::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.2);
+      border-radius: 3px;
+    }
+    @media (min-width: 640px) {
+      .recursos-scroll { padding: 5rem 2.5rem 6rem; }
+    }
+
     .recursos-inner {
       position: relative;
       z-index: 1;
@@ -335,6 +354,7 @@
       align-items: center;
       width: 100%;
       max-width: 52rem;
+      margin: 0 auto;
     }
 
     .recursos-title {
@@ -412,7 +432,74 @@
       opacity: 0.8;
     }
 
-    /* Indicador de scroll */
+    /* ============================================================
+       LISTA DE HERRAMIENTAS IA
+       ============================================================ */
+    .tools-heading {
+      margin-top: 3.5rem;
+      font-weight: 500;
+      font-size: 1.5rem;
+      letter-spacing: -0.02em;
+      color: var(--heading);
+      text-align: center;
+    }
+    @media (min-width: 640px) { .tools-heading { margin-top: 4rem; font-size: 1.75rem; } }
+
+    .tools-sub {
+      margin-top: 0.5rem;
+      max-width: 34rem;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: var(--body-muted);
+      text-align: center;
+    }
+
+    .tools-list {
+      list-style: none;
+      padding: 0;
+      margin: 2rem 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      width: 100%;
+      text-align: left;
+    }
+
+    .tools-list li {
+      padding: 1.1rem 1.25rem 1.2rem;
+      border-radius: 1rem;
+      border: 1px solid var(--glass-border);
+      background: var(--glass-fill);
+      backdrop-filter: blur(12px);
+      color: var(--heading);
+      font-size: 0.9rem;
+      line-height: 1.55;
+      transition: background var(--duration-fast) var(--ease-entrance),
+                  border-color var(--duration-fast) var(--ease-entrance);
+    }
+    .tools-list li:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.24);
+    }
+    .tools-list li strong {
+      font-weight: 500;
+      color: #ffffff;
+      font-size: 1rem;
+    }
+    .tools-list li a {
+      display: inline-block;
+      margin-top: 0.4rem;
+      color: #9db4ff;
+      font-size: 0.82rem;
+      word-break: break-all;
+      transition: color var(--duration-fast) var(--ease-entrance);
+    }
+    .tools-list li a:hover {
+      color: #c8d6ff;
+      text-decoration: underline;
+    }
+
+    /* Indicador de scroll del hero */
     .scroll-hint {
       position: absolute;
       bottom: 1.5rem;
@@ -492,7 +579,7 @@
               <path d="M2.5 9c2.5 0 2.5 4.2 5 4.2S10 9 12 9s2.5 4.2 5 4.2S19.5 9 21.5 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
               <path d="M2.5 15c2.5 0 2.5 4.2 5 4.2S10 15 12 15s2.5 4.2 5 4.2S19.5 15 21.5 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity="0.5"/>
             </svg>
-            Recursos En La Web
+            Recursos en la WEB
           </a>
 
           <!-- div class="nav-pill">
@@ -559,76 +646,69 @@
 
       <!-- ==================== SECCIÓN 2 — RECURSOS ==================== -->
       <section class="fp-section recursos-section" id="recursos" data-index="1">
-        <div class="recursos-inner">
-          <h2 class="recursos-title" id="recursos-title">Recursos</h2>
-          <p class="recursos-sub">
-            Herramientas, guías y material seleccionado para ayudarte a entrar en flow y mantener tu atención enfocada.
-          </p>
+        <div class="recursos-scroll" id="recursos-scroll">
+          <div class="recursos-inner">
+            <h2 class="recursos-title" id="recursos-title">Recursos</h2>
+            <p class="recursos-sub">
+              Herramientas, guías y material seleccionado para ayudarte a entrar en flow y mantener tu atención enfocada.
+            </p>
 
-          <div class="recursos-grid">
-              <span class="tag">Inteligencia</span>
-              <h3>Artificial</h3>
-              <ul>
-  <li>
-    <strong>ChatGPT</strong> — Asistente de IA general de OpenAI. Ideal para redactar textos, resumir documentos, analizar archivos y generar imágenes simples. La versión gratuita tiene límites de uso y acceso a GPT-5.5.<br>
-    <a href="https://chat.openai.com" target="_blank" rel="noopener">https://chat.openai.com</a>
-  </li>
-  <li>
-    <strong>Google Gemini</strong> — Asistente de Google integrado con Gmail, Drive y YouTube. Destaca en investigación, resumen de documentos largos y generación de imágenes (Nano Banana). Plan gratuito con límites diarios.<br>
-    <a href="https://gemini.google.com" target="_blank" rel="noopener">https://gemini.google.com</a>
-  </li>
-  <li>
-    <strong>Claude</strong> — De Anthropic, especializado en textos largos y contexto extenso (hasta 200K tokens). Excelente para edición, análisis documental y escritura natural. Plan gratuito con límite de mensajes renovable cada 5 horas.<br>
-    <a href="https://claude.ai" target="_blank" rel="noopener">https://claude.ai</a>
-  </li>
-  <li>
-    <strong>Perplexity</strong> — Motor de búsqueda con IA que ofrece respuestas con citas y enlaces a fuentes. Ideal para investigación rápida y verificable. Tiene nivel gratuito con búsquedas ilimitadas y funciones avanzadas limitadas.<br>
-    <a href="https://www.perplexity.ai" target="_blank" rel="noopener">https://www.perplexity.ai</a>
-  </li>
-  <li>
-    <strong>NotebookLM</strong> — Herramienta de Google que trabaja exclusivamente con los documentos que tú subes (PDFs, webs, videos). Genera resúmenes, mapas mentales y responde preguntas citando las fuentes. Gratis con hasta 100 cuadernos y 50 fuentes por cuaderno.<br>
-    <a href="https://notebooklm.google.com" target="_blank" rel="noopener">https://notebooklm.google.com</a>
-  </li>
-  <li>
-    <strong>GitHub Copilot</strong> — Asistente de programación integrado en VS Code y otros editores. Ofrece autocompletado y chat con IA. Plan gratuito: 2,000 completados y 50 solicitudes premium al mes.<br>
-    <a href="https://github.com/features/copilot" target="_blank" rel="noopener">https://github.com/features/copilot</a>
-  </li>
-  <li>
-    <strong>Cursor</strong> — Editor de código con IA (fork de VS Code). Incluye autocompletado contextual, edición por chat y modo agente para refactorizar múltiples archivos. Plan Hobby gratuito con solicitudes limitadas.<br>
-    <a href="https://cursor.com" target="_blank" rel="noopener">https://cursor.com</a>
-  </li>
-  <li>
-    <strong>Suno</strong> — Generador de canciones completas con voces e instrumentales a partir de texto. Plan gratuito: 50 créditos diarios (aproximadamente 10 canciones), aunque los resultados no son para uso comercial.<br>
-    <a href="https://suno.com" target="_blank" rel="noopener">https://suno.com</a>
-  </li>
-  <li>
-    <strong>ElevenLabs</strong> — Síntesis de voz de alta calidad y clonación de voz. Plan gratuito: 10,000 caracteres al mes y 3 clones de voz, solo para uso no comercial.<br>
-    <a href="https://elevenlabs.io" target="_blank" rel="noopener">https://elevenlabs.io</a>
-  </li>
-  <li>
-    <strong>Adobe Firefly</strong> — Generador de imágenes entrenado con contenido con licencia, por lo que sus resultados son seguros para uso comercial incluso en el plan gratuito (aproximadamente 25 créditos al mes).<br>
-    <a href="https://firefly.adobe.com" target="_blank" rel="noopener">https://firefly.adobe.com</a>
-  </li>
-  <li>
-    <strong>Leonardo.Ai</strong> — Generador de imágenes con control artístico avanzado (Image Guidance, modelos personalizados). Plan gratuito: 150 tokens rápidos al día, con uso comercial permitido.<br>
-    <a href="https://leonardo.ai" target="_blank" rel="noopener">https://leonardo.ai</a>
-  </li>
-  <li>
-    <strong>Meshy</strong> — Generación de modelos 3D a partir de texto o imagen, con texturas y plugins para Blender/Unity/Unreal. Plan gratuito: 200 créditos al mes (aproximadamente 20 modelos), solo para uso no comercial.<br>
-    <a href="https://www.meshy.ai" target="_blank" rel="noopener">https://www.meshy.ai</a>
-  </li>
-</ul>
-            
-            <a href="#" class="recurso-card">
-              <span class="tag">Herramienta</span>
-              <h3>Focus timer</h3>
-              <p>Un temporizador minimalista diseñado para no romper tu estado de flow.</p>
-            </a>
-            <a href="#" class="recurso-card">
-              <span class="tag">Lectura</span>
-              <h3>Diseñando tu entorno</h3>
-              <p>Cómo reducir la fricción y las distracciones digitales en tu espacio de trabajo.</p>
-            </a>
+            <!-- ================= LISTA DE HERRAMIENTAS IA ================= -->
+            <h3 class="tools-heading">Herramientas de IA gratuitas recomendadas</h3>
+            <p class="tools-sub">
+              Una selección de asistentes, generadores y utilidades con IA que puedes usar sin pagar.
+            </p>
+
+            <ul class="tools-list">
+              <li>
+                <strong>ChatGPT</strong> — Asistente de IA general de OpenAI. Ideal para redactar textos, resumir documentos, analizar archivos y generar imágenes simples. La versión gratuita tiene límites de uso y acceso a GPT-5.5.<br>
+                <a href="https://chat.openai.com" target="_blank" rel="noopener">https://chat.openai.com</a>
+              </li>
+              <li>
+                <strong>Google Gemini</strong> — Asistente de Google integrado con Gmail, Drive y YouTube. Destaca en investigación, resumen de documentos largos y generación de imágenes (Nano Banana). Plan gratuito con límites diarios.<br>
+                <a href="https://gemini.google.com" target="_blank" rel="noopener">https://gemini.google.com</a>
+              </li>
+              <li>
+                <strong>Claude</strong> — De Anthropic, especializado en textos largos y contexto extenso (hasta 200K tokens). Excelente para edición, análisis documental y escritura natural. Plan gratuito con límite de mensajes renovable cada 5 horas.<br>
+                <a href="https://claude.ai" target="_blank" rel="noopener">https://claude.ai</a>
+              </li>
+              <li>
+                <strong>Perplexity</strong> — Motor de búsqueda con IA que ofrece respuestas con citas y enlaces a fuentes. Ideal para investigación rápida y verificable. Tiene nivel gratuito con búsquedas ilimitadas y funciones avanzadas limitadas.<br>
+                <a href="https://www.perplexity.ai" target="_blank" rel="noopener">https://www.perplexity.ai</a>
+              </li>
+              <li>
+                <strong>NotebookLM</strong> — Herramienta de Google que trabaja exclusivamente con los documentos que tú subes (PDFs, webs, videos). Genera resúmenes, mapas mentales y responde preguntas citando las fuentes. Gratis con hasta 100 cuadernos y 50 fuentes por cuaderno.<br>
+                <a href="https://notebooklm.google.com" target="_blank" rel="noopener">https://notebooklm.google.com</a>
+              </li>
+              <li>
+                <strong>GitHub Copilot</strong> — Asistente de programación integrado en VS Code y otros editores. Ofrece autocompletado y chat con IA. Plan gratuito: 2,000 completados y 50 solicitudes premium al mes.<br>
+                <a href="https://github.com/features/copilot" target="_blank" rel="noopener">https://github.com/features/copilot</a>
+              </li>
+              <li>
+                <strong>Cursor</strong> — Editor de código con IA (fork de VS Code). Incluye autocompletado contextual, edición por chat y modo agente para refactorizar múltiples archivos. Plan Hobby gratuito con solicitudes limitadas.<br>
+                <a href="https://cursor.com" target="_blank" rel="noopener">https://cursor.com</a>
+              </li>
+              <li>
+                <strong>Suno</strong> — Generador de canciones completas con voces e instrumentales a partir de texto. Plan gratuito: 50 créditos diarios (aproximadamente 10 canciones), aunque los resultados no son para uso comercial.<br>
+                <a href="https://suno.com" target="_blank" rel="noopener">https://suno.com</a>
+              </li>
+              <li>
+                <strong>ElevenLabs</strong> — Síntesis de voz de alta calidad y clonación de voz. Plan gratuito: 10,000 caracteres al mes y 3 clones de voz, solo para uso no comercial.<br>
+                <a href="https://elevenlabs.io" target="_blank" rel="noopener">https://elevenlabs.io</a>
+              </li>
+              <li>
+                <strong>Adobe Firefly</strong> — Generador de imágenes entrenado con contenido con licencia, por lo que sus resultados son seguros para uso comercial incluso en el plan gratuito (aproximadamente 25 créditos al mes).<br>
+                <a href="https://firefly.adobe.com" target="_blank" rel="noopener">https://firefly.adobe.com</a>
+              </li>
+              <li>
+                <strong>Leonardo.Ai</strong> — Generador de imágenes con control artístico avanzado (Image Guidance, modelos personalizados). Plan gratuito: 150 tokens rápidos al día, con uso comercial permitido.<br>
+                <a href="https://leonardo.ai" target="_blank" rel="noopener">https://leonardo.ai</a>
+              </li>
+              <li>
+                <strong>Meshy</strong> — Generación de modelos 3D a partir de texto o imagen, con texturas y plugins para Blender/Unity/Unreal. Plan gratuito: 200 créditos al mes (aproximadamente 20 modelos), solo para uso no comercial.<br>
+                <a href="https://www.meshy.ai" target="_blank" rel="noopener">https://www.meshy.ai</a>
+              </li>
+            </ul>
           </div>
         </div>
       </section>
@@ -642,7 +722,7 @@
     <button class="fp-dot" data-index="1" aria-label="Ir a recursos"></button>
   </div>
 
-  <!-- Lenis smooth scroll (mantenido por paridad, aunque el documento no scrollea) -->
+  <!-- Lenis smooth scroll (mantenido por paridad) -->
   <script type="importmap">
     { "imports": { "lenis": "https://unpkg.com/lenis@1.3.19/dist/lenis.mjs" } }
   </script>
@@ -652,7 +732,6 @@
     const lenis = new Lenis({ smoothWheel: false, smoothTouch: false });
     function raf(t) { lenis.raf(t); requestAnimationFrame(raf); }
     requestAnimationFrame(raf);
-    // No usamos lenis para el documento (está oculto); solo por si acaso.
   </script>
 
   <!-- Fluid simulation (engine verbatim) -->
@@ -1661,23 +1740,23 @@
       const totalSections = sections.length;
       let currentIndex = 0;
       let isAnimating = false;
-      const ANIM_DURATION = 1000; // debe coincidir con el transition del CSS
+      const ANIM_DURATION = 1000;
       const WHEEL_THRESHOLD = 20;
       const TOUCH_THRESHOLD = 40;
 
-      // Actualiza los dots
       const dots = Array.from(document.querySelectorAll('.fp-dot'));
       function updateDots() {
         dots.forEach((d, i) => d.classList.toggle('active', i === currentIndex));
       }
 
-      // Aplica el transform al track
       function applyTransform(index) {
-        const offset = -index * 100; // en lvh
+        const offset = -index * 100;
         track.style.transform = `translate3d(0, ${offset}lvh, 0)`;
       }
 
-      // Va a una sección concreta
+      // Referencia al contenedor scrollable de recursos
+      const recursosScroll = document.getElementById('recursos-scroll');
+
       function goToSection(index) {
         if (isAnimating) return;
         if (index < 0 || index >= totalSections) return;
@@ -1688,19 +1767,20 @@
         applyTransform(currentIndex);
         updateDots();
 
-        // Revelar recursos al entrar en la sección 2
         if (currentIndex === 1) revealRecursos();
 
-        // Ocultar pista de scroll al salir de la sección 0
         if (scrollHint) {
           scrollHint.style.opacity = currentIndex === 0 ? '0.85' : '0';
         }
 
-        // Desbloquear al terminar la animación
+        // Al volver al hero, reseteamos el scroll interno de recursos
+        if (currentIndex === 0 && recursosScroll) {
+          recursosScroll.scrollTop = 0;
+        }
+
         setTimeout(() => { isAnimating = false; }, ANIM_DURATION);
       }
 
-      // Aplicamos el transform inicial
       applyTransform(0);
 
       // ---------- Wheel ----------
@@ -1708,13 +1788,26 @@
       let wheelResetTimer = null;
 
       function onWheel(e) {
-        // Ignoramos durante la animación, y bloqueamos el scroll nativo por completo
+        // Si estamos en la sección de recursos, el scroll interno tiene prioridad
+        if (currentIndex === 1 && recursosScroll) {
+          const atTop = recursosScroll.scrollTop <= 0;
+          const atBottom = Math.ceil(recursosScroll.scrollTop + recursosScroll.clientHeight) >= recursosScroll.scrollHeight;
+
+          if (e.deltaY > 0 && !atBottom) {
+            // Scroll hacia abajo dentro de recursos: dejar pasar el scroll interno
+            return;
+          }
+          if (e.deltaY < 0 && !atTop) {
+            // Scroll hacia arriba dentro de recursos: dejar pasar
+            return;
+          }
+        }
+
         if (isAnimating) {
           e.preventDefault();
           return;
         }
 
-        // Bloqueamos siempre el scroll nativo del documento
         e.preventDefault();
 
         wheelAccum += e.deltaY;
@@ -1736,12 +1829,16 @@
       // ---------- Touch ----------
       let touchStartY = 0;
       let touchActive = false;
+      let touchInsideRecursosScroll = false;
 
       function onTouchStart(e) {
         if (e.touches.length !== 1) return;
         if (isAnimating) return;
         touchStartY = e.touches[0].clientY;
         touchActive = true;
+        // ¿El touch empezó dentro del contenedor scrollable de recursos?
+        touchInsideRecursosScroll = currentIndex === 1 && recursosScroll &&
+          e.target && recursosScroll.contains(e.target);
       }
 
       function onTouchMove(e) {
@@ -1750,6 +1847,17 @@
           e.preventDefault();
           return;
         }
+
+        // Si estamos dentro del scroll interno de recursos, dejamos pasar el scroll nativo
+        if (touchInsideRecursosScroll) {
+          const atTop = recursosScroll.scrollTop <= 0;
+          const atBottom = Math.ceil(recursosScroll.scrollTop + recursosScroll.clientHeight) >= recursosScroll.scrollHeight;
+          const dy = touchStartY - e.touches[0].clientY;
+          if ((dy > 0 && !atBottom) || (dy < 0 && !atTop)) {
+            return; // scroll interno
+          }
+        }
+
         const dy = touchStartY - e.touches[0].clientY;
         if (Math.abs(dy) < TOUCH_THRESHOLD) return;
 
@@ -1784,7 +1892,6 @@
         }
       }
 
-      // ---------- Dots click ----------
       dots.forEach(dot => {
         dot.addEventListener('click', () => {
           const idx = parseInt(dot.dataset.index, 10);
@@ -1792,16 +1899,13 @@
         });
       });
 
-      // ---------- Listeners ----------
       window.addEventListener('wheel', onWheel, { passive: false });
       window.addEventListener('touchstart', onTouchStart, { passive: true });
       window.addEventListener('touchmove', onTouchMove, { passive: false });
       window.addEventListener('touchend', onTouchEnd, { passive: true });
       window.addEventListener('keydown', onKeyDown);
 
-      // Bloqueo extra de scroll nativo por si acaso
-      document.addEventListener('scroll', (e) => {
-        // No debería ocurrir, pero forzamos scroll a 0
+      document.addEventListener('scroll', () => {
         if (window.scrollY !== 0 || window.scrollX !== 0) {
           window.scrollTo(0, 0);
         }
