@@ -56,9 +56,6 @@
       cursor: pointer;
     }
 
-    /* ============================================================
-       CONTENEDOR FULLPAGE
-       ============================================================ */
     .fullpage {
       position: relative;
       width: 100vw;
@@ -85,9 +82,6 @@
       justify-content: center;
     }
 
-    /* ============================================================
-       SECCIÓN 1 — HERO
-       ============================================================ */
     .hero-section {
       background: var(--hero-base);
       text-align: center;
@@ -298,9 +292,6 @@
     .reveal { opacity: 0; will-change: opacity, transform; }
     .word-span { display: inline-block; opacity: 0; will-change: opacity, transform; }
 
-    /* ============================================================
-       SECCIÓN 2 — RECURSOS (con scroll interno)
-       ============================================================ */
     .recursos-section {
       background: var(--hero-base);
       text-align: center;
@@ -323,7 +314,6 @@
         transparent 75%);
     }
 
-    /* Contenedor scrollable de la sección 2 */
     .recursos-scroll {
       position: relative;
       z-index: 1;
@@ -432,9 +422,6 @@
       opacity: 0.8;
     }
 
-    /* ============================================================
-       LISTA DE HERRAMIENTAS IA
-       ============================================================ */
     .tools-heading {
       margin-top: 3.5rem;
       font-weight: 500;
@@ -454,10 +441,39 @@
       text-align: center;
     }
 
+    .tool-category {
+      width: 100%;
+      margin-top: 2.5rem;
+    }
+    .tool-category:first-of-type { margin-top: 2rem; }
+
+    .tool-category-title {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 1.1rem;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--heading);
+      text-align: left;
+      margin-bottom: 0.9rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--glass-border);
+    }
+    @media (min-width: 640px) { .tool-category-title { font-size: 1.2rem; } }
+    .tool-category-title::before {
+      content: "";
+      width: 0.35rem;
+      height: 1rem;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #9db4ff, #b98aff);
+      flex-shrink: 0;
+    }
+
     .tools-list {
       list-style: none;
       padding: 0;
-      margin: 2rem 0 0;
+      margin: 0;
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
@@ -466,6 +482,7 @@
     }
 
     .tools-list li {
+      position: relative;
       padding: 1.1rem 1.25rem 1.2rem;
       border-radius: 1rem;
       border: 1px solid var(--glass-border);
@@ -499,7 +516,36 @@
       text-decoration: underline;
     }
 
-    /* Indicador de scroll del hero */
+    .tool-rating {
+      position: absolute;
+      bottom: 0.55rem;
+      right: 0.7rem;
+      display: flex;
+      align-items: center;
+      gap: 0.1rem;
+      user-select: none;
+    }
+
+    .tool-rating .star-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      font-size: 0.95rem;
+      line-height: 1;
+      color: rgba(255,255,255,0.22);
+      transition: color 120ms ease, transform 120ms ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tool-rating .star-btn:hover { transform: scale(1.18); }
+    .tool-rating .star-btn.is-filled {
+      color: #ffd76a;
+      text-shadow: 0 0 6px rgba(255, 215, 106, 0.4);
+    }
+    .tool-rating .star-btn.is-preview {
+      color: rgba(255, 215, 106, 0.75);
+    }
+
     .scroll-hint {
       position: absolute;
       bottom: 1.5rem;
@@ -529,7 +575,6 @@
       50%      { transform: translate(-50%, 6px); opacity: 0.45; }
     }
 
-    /* Puntos de navegación lateral */
     .fp-dots {
       position: fixed;
       right: 1.25rem;
@@ -541,9 +586,7 @@
       gap: 0.7rem;
       pointer-events: auto;
     }
-    @media (min-width: 640px) {
-      .fp-dots { right: 2rem; }
-    }
+    @media (min-width: 640px) { .fp-dots { right: 2rem; } }
     .fp-dot {
       width: 0.5rem;
       height: 0.5rem;
@@ -558,9 +601,7 @@
       background: rgba(255,255,255,0.95);
       transform: scale(1.3);
     }
-    .fp-dot:hover {
-      background: rgba(255,255,255,0.7);
-    }
+    .fp-dot:hover { background: rgba(255,255,255,0.7); }
   </style>
 </head>
 <body>
@@ -568,7 +609,7 @@
   <div class="fullpage">
     <div class="fullpage-track" id="fullpage-track">
 
-      <!-- ==================== SECCIÓN 1 — HERO ==================== -->
+      <!-- SECCIÓN 1 — HERO -->
       <section class="fp-section hero-section" id="hero" data-index="0">
         <canvas id="fluid-canvas" aria-hidden="true"></canvas>
         <div class="scrim" aria-hidden="true"></div>
@@ -606,7 +647,7 @@
             <span class="word-span">World</span>
           </h1>
 
-          <p id="subline" class="subline" aria-label="Cut through the noise, reclaim your attention, and do work that truly matters.">
+          <p id="subline" class="subline">
             <span class="word-span">Cut</span>
             <span class="word-span">through</span>
             <span class="word-span">the</span>
@@ -644,7 +685,7 @@
         </div>
       </section>
 
-      <!-- ==================== SECCIÓN 2 — RECURSOS ==================== -->
+      <!-- SECCIÓN 2 — RECURSOS -->
       <section class="fp-section recursos-section" id="recursos" data-index="1">
         <div class="recursos-scroll" id="recursos-scroll">
           <div class="recursos-inner">
@@ -671,66 +712,116 @@
               </a>
             </div>
 
-            <!-- ================= LISTA DE HERRAMIENTAS IA (ORDEN ALFABÉTICO) ================= -->
-            <h3 class="tools-heading">Herramientas de IA gratuitas recomendadas</h3>
-            <p class="tools-sub">
-              Una selección de asistentes, generadores y utilidades con IA que puedes usar sin pagar.
-            </p>
+            <h3 class="tools-heading">Herramientas de IA gratuitas</h3>
+            <p class="tools-sub">Una selección de asistentes, generadores y utilidades con IA que puedes usar sin pagar.</p>
 
-            <ul class="tools-list">
-              <li>
-                <strong>Adobe Firefly</strong> — Generador de imágenes entrenado con contenido con licencia, por lo que sus resultados son seguros para uso comercial incluso en el plan gratuito (aproximadamente 25 créditos al mes).<br>
-                <a href="https://firefly.adobe.com" target="_blank" rel="noopener">https://firefly.adobe.com</a>
-              </li>
-              <li>
-                <strong>ChatGPT</strong> — Asistente de IA general de OpenAI. Ideal para redactar textos, resumir documentos, analizar archivos y generar imágenes simples. La versión gratuita tiene límites de uso y acceso a GPT-5.5.<br>
-                <a href="https://chat.openai.com" target="_blank" rel="noopener">https://chat.openai.com</a>
-              </li>
-              <li>
-                <strong>Claude</strong> — De Anthropic, especializado en textos largos y contexto extenso (hasta 200K tokens). Excelente para edición, análisis documental y escritura natural. Plan gratuito con límite de mensajes renovable cada 5 horas.<br>
-                <a href="https://claude.ai" target="_blank" rel="noopener">https://claude.ai</a>
-              </li>
-              <li>
-                <strong>Cursor</strong> — Editor de código con IA (fork de VS Code). Incluye autocompletado contextual, edición por chat y modo agente para refactorizar múltiples archivos. Plan Hobby gratuito con solicitudes limitadas.<br>
-                <a href="https://cursor.com" target="_blank" rel="noopener">https://cursor.com</a>
-              </li>
-              <li>
-                <strong>DeepSeek</strong> — Asistente de IA conversacional y de razonamiento de DeepSeek. Destaca en programación, matemáticas y análisis de textos largos, con un modelo gratuito muy competitivo y sin límites estrictos de mensajes.<br>
-                <a href="https://chat.deepseek.com" target="_blank" rel="noopener">https://chat.deepseek.com</a>
-              </li>
-              <li>
-                <strong>ElevenLabs</strong> — Síntesis de voz de alta calidad y clonación de voz. Plan gratuito: 10,000 caracteres al mes y 3 clones de voz, solo para uso no comercial.<br>
-                <a href="https://elevenlabs.io" target="_blank" rel="noopener">https://elevenlabs.io</a>
-              </li>
-              <li>
-                <strong>GitHub Copilot</strong> — Asistente de programación integrado en VS Code y otros editores. Ofrece autocompletado y chat con IA. Plan gratuito: 2,000 completados y 50 solicitudes premium al mes.<br>
-                <a href="https://github.com/features/copilot" target="_blank" rel="noopener">https://github.com/features/copilot</a>
-              </li>
-              <li>
-                <strong>Google Gemini</strong> — Asistente de Google integrado con Gmail, Drive y YouTube. Destaca en investigación, resumen de documentos largos y generación de imágenes (Nano Banana). Plan gratuito con límites diarios.<br>
-                <a href="https://gemini.google.com" target="_blank" rel="noopener">https://gemini.google.com</a>
-              </li>
-              <li>
-                <strong>Leonardo.Ai</strong> — Generador de imágenes con control artístico avanzado (Image Guidance, modelos personalizados). Plan gratuito: 150 tokens rápidos al día, con uso comercial permitido.<br>
-                <a href="https://leonardo.ai" target="_blank" rel="noopener">https://leonardo.ai</a>
-              </li>
-              <li>
-                <strong>Meshy</strong> — Generación de modelos 3D a partir de texto o imagen, con texturas y plugins para Blender/Unity/Unreal. Plan gratuito: 200 créditos al mes (aproximadamente 20 modelos), solo para uso no comercial.<br>
-                <a href="https://www.meshy.ai" target="_blank" rel="noopener">https://www.meshy.ai</a>
-              </li>
-              <li>
-                <strong>NotebookLM</strong> — Herramienta de Google que trabaja exclusivamente con los documentos que tú subes (PDFs, webs, videos). Genera resúmenes, mapas mentales y responde preguntas citando las fuentes. Gratis con hasta 100 cuadernos y 50 fuentes por cuaderno.<br>
-                <a href="https://notebooklm.google.com" target="_blank" rel="noopener">https://notebooklm.google.com</a>
-              </li>
-              <li>
-                <strong>Perplexity</strong> — Motor de búsqueda con IA que ofrece respuestas con citas y enlaces a fuentes. Ideal para investigación rápida y verificable. Tiene nivel gratuito con búsquedas ilimitadas y funciones avanzadas limitadas.<br>
-                <a href="https://www.perplexity.ai" target="_blank" rel="noopener">https://www.perplexity.ai</a>
-              </li>
-              <li>
-                <strong>Suno</strong> — Generador de canciones completas con voces e instrumentales a partir de texto. Plan gratuito: 50 créditos diarios (aproximadamente 10 canciones), aunque los resultados no son para uso comercial.<br>
-                <a href="https://suno.com" target="_blank" rel="noopener">https://suno.com</a>
-              </li>
-            </ul>
+            <div class="tool-category">
+              <h4 class="tool-category-title">Asistentes y productividad</h4>
+              <ul class="tools-list">
+                <li data-tool-id="chatgpt">
+                  <strong>ChatGPT</strong> — Asistente de IA general de OpenAI. Ideal para redactar textos, resumir documentos, analizar archivos y generar imágenes simples. La versión gratuita tiene límites de uso y acceso a GPT-5.5.<br>
+                  <a href="https://chat.openai.com" target="_blank" rel="noopener">https://chat.openai.com</a>
+                  <div class="tool-rating" data-tool-id="chatgpt" role="group" aria-label="Valoración de ChatGPT"></div>
+                </li>
+                <li data-tool-id="claude">
+                  <strong>Claude</strong> — De Anthropic, especializado en textos largos y contexto extenso (hasta 200K tokens). Excelente para edición, análisis documental y escritura natural. Plan gratuito con límite de mensajes renovable cada 5 horas.<br>
+                  <a href="https://claude.ai" target="_blank" rel="noopener">https://claude.ai</a>
+                  <div class="tool-rating" data-tool-id="claude" role="group" aria-label="Valoración de Claude"></div>
+                </li>
+                <li data-tool-id="deepseek">
+                  <strong>DeepSeek</strong> — Asistente de IA conversacional y de razonamiento de DeepSeek. Destaca en programación, matemáticas y análisis de textos largos, con un modelo gratuito muy competitivo y sin límites estrictos de mensajes.<br>
+                  <a href="https://chat.deepseek.com" target="_blank" rel="noopener">https://chat.deepseek.com</a>
+                  <div class="tool-rating" data-tool-id="deepseek" role="group" aria-label="Valoración de DeepSeek"></div>
+                </li>
+                <li data-tool-id="gemini">
+                  <strong>Google Gemini</strong> — Asistente de Google integrado con Gmail, Drive y YouTube. Destaca en investigación, resumen de documentos largos y generación de imágenes (Nano Banana). Plan gratuito con límites diarios.<br>
+                  <a href="https://gemini.google.com" target="_blank" rel="noopener">https://gemini.google.com</a>
+                  <div class="tool-rating" data-tool-id="gemini" role="group" aria-label="Valoración de Google Gemini"></div>
+                </li>
+                <li data-tool-id="notebooklm">
+                  <strong>NotebookLM</strong> — Herramienta de Google que trabaja exclusivamente con los documentos que tú subes (PDFs, webs, videos). Genera resúmenes, mapas mentales y responde preguntas citando las fuentes. Gratis con hasta 100 cuadernos y 50 fuentes por cuaderno.<br>
+                  <a href="https://notebooklm.google.com" target="_blank" rel="noopener">https://notebooklm.google.com</a>
+                  <div class="tool-rating" data-tool-id="notebooklm" role="group" aria-label="Valoración de NotebookLM"></div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="tool-category">
+              <h4 class="tool-category-title">Búsqueda e investigación</h4>
+              <ul class="tools-list">
+                <li data-tool-id="perplexity">
+                  <strong>Perplexity</strong> — Motor de búsqueda con IA que ofrece respuestas con citas y enlaces a fuentes. Ideal para investigación rápida y verificable. Tiene nivel gratuito con búsquedas ilimitadas y funciones avanzadas limitadas.<br>
+                  <a href="https://www.perplexity.ai" target="_blank" rel="noopener">https://www.perplexity.ai</a>
+                  <div class="tool-rating" data-tool-id="perplexity" role="group" aria-label="Valoración de Perplexity"></div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="tool-category">
+              <h4 class="tool-category-title">Programación</h4>
+              <ul class="tools-list">
+                <li data-tool-id="cursor">
+                  <strong>Cursor</strong> — Editor de código con IA (fork de VS Code). Incluye autocompletado contextual, edición por chat y modo agente para refactorizar múltiples archivos. Plan Hobby gratuito con solicitudes limitadas.<br>
+                  <a href="https://cursor.com" target="_blank" rel="noopener">https://cursor.com</a>
+                  <div class="tool-rating" data-tool-id="cursor" role="group" aria-label="Valoración de Cursor"></div>
+                </li>
+                <li data-tool-id="github-copilot">
+                  <strong>GitHub Copilot</strong> — Asistente de programación integrado en VS Code y otros editores. Ofrece autocompletado y chat con IA. Plan gratuito: 2,000 completados y 50 solicitudes premium al mes.<br>
+                  <a href="https://github.com/features/copilot" target="_blank" rel="noopener">https://github.com/features/copilot</a>
+                  <div class="tool-rating" data-tool-id="github-copilot" role="group" aria-label="Valoración de GitHub Copilot"></div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="tool-category">
+              <h4 class="tool-category-title">Imágenes y arte</h4>
+              <ul class="tools-list">
+                <li data-tool-id="adobe-firefly">
+                  <strong>Adobe Firefly</strong> — Generador de imágenes entrenado con contenido con licencia, por lo que sus resultados son seguros para uso comercial incluso en el plan gratuito (aproximadamente 25 créditos al mes).<br>
+                  <a href="https://firefly.adobe.com" target="_blank" rel="noopener">https://firefly.adobe.com</a>
+                  <div class="tool-rating" data-tool-id="adobe-firefly" role="group" aria-label="Valoración de Adobe Firefly"></div>
+                </li>
+                <li data-tool-id="leonardo-ai">
+                  <strong>Leonardo.Ai</strong> — Generador de imágenes con control artístico avanzado (Image Guidance, modelos personalizados). Plan gratuito: 150 tokens rápidos al día, con uso comercial permitido.<br>
+                  <a href="https://leonardo.ai" target="_blank" rel="noopener">https://leonardo.ai</a>
+                  <div class="tool-rating" data-tool-id="leonardo-ai" role="group" aria-label="Valoración de Leonardo.Ai"></div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="tool-category">
+              <h4 class="tool-category-title">Música</h4>
+              <ul class="tools-list">
+                <li data-tool-id="suno">
+                  <strong>Suno</strong> — Generador de canciones completas con voces e instrumentales a partir de texto. Plan gratuito: 50 créditos diarios (aproximadamente 10 canciones), aunque los resultados no son para uso comercial.<br>
+                  <a href="https://suno.com" target="_blank" rel="noopener">https://suno.com</a>
+                  <div class="tool-rating" data-tool-id="suno" role="group" aria-label="Valoración de Suno"></div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="tool-category">
+              <h4 class="tool-category-title">Audio y voz</h4>
+              <ul class="tools-list">
+                <li data-tool-id="elevenlabs">
+                  <strong>ElevenLabs</strong> — Síntesis de voz de alta calidad y clonación de voz. Plan gratuito: 10,000 caracteres al mes y 3 clones de voz, solo para uso no comercial.<br>
+                  <a href="https://elevenlabs.io" target="_blank" rel="noopener">https://elevenlabs.io</a>
+                  <div class="tool-rating" data-tool-id="elevenlabs" role="group" aria-label="Valoración de ElevenLabs"></div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="tool-category">
+              <h4 class="tool-category-title">3D y modelado</h4>
+              <ul class="tools-list">
+                <li data-tool-id="meshy">
+                  <strong>Meshy</strong> — Generación de modelos 3D a partir de texto o imagen, con texturas y plugins para Blender/Unity/Unreal. Plan gratuito: 200 créditos al mes (aproximadamente 20 modelos), solo para uso no comercial.<br>
+                  <a href="https://www.meshy.ai" target="_blank" rel="noopener">https://www.meshy.ai</a>
+                  <div class="tool-rating" data-tool-id="meshy" role="group" aria-label="Valoración de Meshy"></div>
+                </li>
+              </ul>
+            </div>
+
           </div>
         </div>
       </section>
@@ -738,13 +829,12 @@
     </div>
   </div>
 
-  <!-- Puntos de navegación lateral -->
   <div class="fp-dots" id="fp-dots" aria-label="Navegación de secciones">
     <button class="fp-dot active" data-index="0" aria-label="Ir a inicio"></button>
     <button class="fp-dot" data-index="1" aria-label="Ir a recursos"></button>
   </div>
 
-  <!-- Lenis smooth scroll (mantenido por paridad) -->
+  <!-- Lenis smooth scroll -->
   <script type="importmap">
     { "imports": { "lenis": "https://unpkg.com/lenis@1.3.19/dist/lenis.mjs" } }
   </script>
@@ -756,67 +846,43 @@
     requestAnimationFrame(raf);
   </script>
 
-  <!-- Fluid simulation (engine verbatim) -->
+  <!-- Fluid simulation -->
   <script>
     function fluidSimulation(canvas) {
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
 
         let config = {
-            SIM_RESOLUTION: 200,
-            DYE_RESOLUTION: 512,
-            DENSITY_DISSIPATION: 0.958,
-            VELOCITY_DISSIPATION: 0.96,
-            PRESSURE_DISSIPATION: 0.8,
-            PRESSURE_ITERATIONS: 20,
-            CURL: 42,
-            SPLAT_RADIUS: 0.22,
-            SHADING: true,
-            COLORFUL: true,
-            PAUSED: false,
+            SIM_RESOLUTION: 200, DYE_RESOLUTION: 512,
+            DENSITY_DISSIPATION: 0.958, VELOCITY_DISSIPATION: 0.96,
+            PRESSURE_DISSIPATION: 0.8, PRESSURE_ITERATIONS: 20,
+            CURL: 42, SPLAT_RADIUS: 0.22,
+            SHADING: true, COLORFUL: true, PAUSED: false,
             BACK_COLOR: { r: 4, g: 5, b: 12 },
-            TRANSPARENT: false,
-            BLOOM: false,
-            BLOOM_ITERATIONS: 8,
-            BLOOM_RESOLUTION: 256,
-            BLOOM_INTENSITY: 0.8,
-            BLOOM_THRESHOLD: 0.8,
-            BLOOM_SOFT_KNEE: 0.7
+            TRANSPARENT: false, BLOOM: false,
+            BLOOM_ITERATIONS: 8, BLOOM_RESOLUTION: 256,
+            BLOOM_INTENSITY: 0.8, BLOOM_THRESHOLD: 0.8, BLOOM_SOFT_KNEE: 0.7
         }
 
         function pointerPrototype() {
-            this.id = -1;
-            this.x = 0;
-            this.y = 0;
-            this.dx = 0;
-            this.dy = 0;
-            this.down = false;
-            this.moved = false;
-            this.color = [30, 0, 300];
+            this.id = -1; this.x = 0; this.y = 0; this.dx = 0; this.dy = 0;
+            this.down = false; this.moved = false; this.color = [30, 0, 300];
         }
 
-        let pointers = [];
-        let splatStack = [];
-        let bloomFramebuffers = [];
+        let pointers = []; let splatStack = []; let bloomFramebuffers = [];
         pointers.push(new pointerPrototype());
 
         const { gl, ext } = getWebGLContext(canvas);
 
-        if (isMobile())
-            config.SHADING = false;
-        if (!ext.supportLinearFiltering) {
-            config.SHADING = false;
-            config.BLOOM = false;
-        }
+        if (isMobile()) config.SHADING = false;
+        if (!ext.supportLinearFiltering) { config.SHADING = false; config.BLOOM = false; }
 
         function getWebGLContext(canvas) {
             const params = { alpha: true, depth: false, stencil: false, antialias: false, preserveDrawingBuffer: false };
             let gl = canvas.getContext('webgl2', params);
             const isWebGL2 = !!gl;
-            if (!isWebGL2)
-                gl = canvas.getContext('webgl', params) || canvas.getContext('experimental-webgl', params);
-            let halfFloat;
-            let supportLinearFiltering;
+            if (!isWebGL2) gl = canvas.getContext('webgl', params) || canvas.getContext('experimental-webgl', params);
+            let halfFloat; let supportLinearFiltering;
             if (isWebGL2) {
                 gl.getExtension('EXT_color_buffer_float');
                 supportLinearFiltering = gl.getExtension('OES_texture_float_linear');
@@ -838,7 +904,6 @@
             }
             return { gl, ext: { formatRGBA, formatRG, formatR, halfFloatTexType, supportLinearFiltering } };
         }
-
         function getSupportedFormat(gl, internalFormat, format, type) {
             if (!supportRenderTextureFormat(gl, internalFormat, format, type)) {
                 switch (internalFormat) {
@@ -849,7 +914,6 @@
             }
             return { internalFormat, format };
         }
-
         function supportRenderTextureFormat(gl, internalFormat, format, type) {
             let texture = gl.createTexture();
             gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -863,7 +927,6 @@
             gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
             return gl.checkFramebufferStatus(gl.FRAMEBUFFER) == gl.FRAMEBUFFER_COMPLETE;
         }
-
         function isMobile() { return /Mobi|Android/i.test(navigator.userAgent); }
 
         class GLProgram {
@@ -873,8 +936,7 @@
                 gl.attachShader(this.program, vs);
                 gl.attachShader(this.program, fs);
                 gl.linkProgram(this.program);
-                if (!gl.getProgramParameter(this.program, gl.LINK_STATUS))
-                    throw gl.getProgramInfoLog(this.program);
+                if (!gl.getProgramParameter(this.program, gl.LINK_STATUS)) throw gl.getProgramInfoLog(this.program);
                 const n = gl.getProgramParameter(this.program, gl.ACTIVE_UNIFORMS);
                 for (let i = 0; i < n; i++) {
                     const name = gl.getActiveUniform(this.program, i).name;
@@ -883,13 +945,11 @@
             }
             bind() { gl.useProgram(this.program); }
         }
-
         function compileShader(type, source) {
             const s = gl.createShader(type);
             gl.shaderSource(s, source);
             gl.compileShader(s);
-            if (!gl.getShaderParameter(s, gl.COMPILE_STATUS))
-                throw gl.getShaderInfoLog(s);
+            if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw gl.getShaderInfoLog(s);
             return s;
         }
 
@@ -907,18 +967,15 @@
                 gl_Position = vec4(aPosition, 0.0, 1.0);
             }
         `);
-
         const clearShader = compileShader(gl.FRAGMENT_SHADER, `
             precision mediump float; precision mediump sampler2D;
             varying highp vec2 vUv; uniform sampler2D uTexture; uniform float value;
             void main () { gl_FragColor = value * texture2D(uTexture, vUv); }
         `);
-
         const colorShader = compileShader(gl.FRAGMENT_SHADER, `
             precision mediump float; uniform vec4 color;
             void main () { gl_FragColor = color; }
         `);
-
         const backgroundShader = compileShader(gl.FRAGMENT_SHADER, `
             precision highp float; precision highp sampler2D;
             varying vec2 vUv; uniform sampler2D uTexture; uniform float aspectRatio;
@@ -930,7 +987,6 @@
                 gl_FragColor = vec4(vec3(v), 1.0);
             }
         `);
-
         const displayShader = compileShader(gl.FRAGMENT_SHADER, `
             precision highp float; precision highp sampler2D;
             varying vec2 vUv; uniform sampler2D uTexture;
@@ -940,7 +996,6 @@
                 gl_FragColor = vec4(C, a);
             }
         `);
-
         const displayBloomShader = compileShader(gl.FRAGMENT_SHADER, `
             precision highp float; precision highp sampler2D;
             varying vec2 vUv; uniform sampler2D uTexture; uniform sampler2D uBloom; uniform sampler2D uDithering; uniform vec2 ditherScale;
@@ -956,7 +1011,6 @@
                 gl_FragColor = vec4(C, a);
             }
         `);
-
         const displayShadingShader = compileShader(gl.FRAGMENT_SHADER, `
             precision highp float; precision highp sampler2D;
             varying vec2 vUv; varying vec2 vL; varying vec2 vR; varying vec2 vT; varying vec2 vB;
@@ -977,7 +1031,6 @@
                 gl_FragColor = vec4(C, a);
             }
         `);
-
         const displayBloomShadingShader = compileShader(gl.FRAGMENT_SHADER, `
             precision highp float; precision highp sampler2D;
             varying vec2 vUv; varying vec2 vL; varying vec2 vR; varying vec2 vT; varying vec2 vB;
@@ -1004,7 +1057,6 @@
                 gl_FragColor = vec4(C, a);
             }
         `);
-
         const bloomPrefilterShader = compileShader(gl.FRAGMENT_SHADER, `
             precision mediump float; precision mediump sampler2D;
             varying vec2 vUv; uniform sampler2D uTexture; uniform vec3 curve; uniform float threshold;
@@ -1017,7 +1069,6 @@
                 gl_FragColor = vec4(c, 0.0);
             }
         `);
-
         const bloomBlurShader = compileShader(gl.FRAGMENT_SHADER, `
             precision mediump float; precision mediump sampler2D;
             varying vec2 vL; varying vec2 vR; varying vec2 vT; varying vec2 vB; uniform sampler2D uTexture;
@@ -1031,7 +1082,6 @@
                 gl_FragColor = sum;
             }
         `);
-
         const bloomFinalShader = compileShader(gl.FRAGMENT_SHADER, `
             precision mediump float; precision mediump sampler2D;
             varying vec2 vL; varying vec2 vR; varying vec2 vT; varying vec2 vB; uniform sampler2D uTexture; uniform float intensity;
@@ -1045,7 +1095,6 @@
                 gl_FragColor = sum * intensity;
             }
         `);
-
         const splatShader = compileShader(gl.FRAGMENT_SHADER, `
             precision highp float; precision highp sampler2D;
             varying vec2 vUv; uniform sampler2D uTarget; uniform float aspectRatio; uniform vec3 color; uniform vec2 point; uniform float radius;
@@ -1057,7 +1106,6 @@
                 gl_FragColor = vec4(base + splat, 1.0);
             }
         `);
-
         const advectionManualFilteringShader = compileShader(gl.FRAGMENT_SHADER, `
             precision highp float; precision highp sampler2D;
             varying vec2 vUv; uniform sampler2D uVelocity; uniform sampler2D uSource;
@@ -1078,7 +1126,6 @@
                 gl_FragColor.a = 1.0;
             }
         `);
-
         const advectionShader = compileShader(gl.FRAGMENT_SHADER, `
             precision highp float; precision highp sampler2D;
             varying vec2 vUv; uniform sampler2D uVelocity; uniform sampler2D uSource;
@@ -1089,7 +1136,6 @@
                 gl_FragColor.a = 1.0;
             }
         `);
-
         const divergenceShader = compileShader(gl.FRAGMENT_SHADER, `
             precision mediump float; precision mediump sampler2D;
             varying highp vec2 vUv; varying highp vec2 vL; varying highp vec2 vR; varying highp vec2 vT; varying highp vec2 vB;
@@ -1108,7 +1154,6 @@
                 gl_FragColor = vec4(div, 0.0, 0.0, 1.0);
             }
         `);
-
         const curlShader = compileShader(gl.FRAGMENT_SHADER, `
             precision mediump float; precision mediump sampler2D;
             varying highp vec2 vUv; varying highp vec2 vL; varying highp vec2 vR; varying highp vec2 vT; varying highp vec2 vB;
@@ -1122,7 +1167,6 @@
                 gl_FragColor = vec4(0.5 * vorticity, 0.0, 0.0, 1.0);
             }
         `);
-
         const vorticityShader = compileShader(gl.FRAGMENT_SHADER, `
             precision highp float; precision highp sampler2D;
             varying vec2 vUv; varying vec2 vL; varying vec2 vR; varying vec2 vT; varying vec2 vB;
@@ -1141,7 +1185,6 @@
                 gl_FragColor = vec4(vel + force * dt, 0.0, 1.0);
             }
         `);
-
         const pressureShader = compileShader(gl.FRAGMENT_SHADER, `
             precision mediump float; precision mediump sampler2D;
             varying highp vec2 vUv; varying highp vec2 vL; varying highp vec2 vR; varying highp vec2 vT; varying highp vec2 vB;
@@ -1158,7 +1201,6 @@
                 gl_FragColor = vec4(pressure, 0.0, 0.0, 1.0);
             }
         `);
-
         const gradientSubtractShader = compileShader(gl.FRAGMENT_SHADER, `
             precision mediump float; precision mediump sampler2D;
             varying highp vec2 vUv; varying highp vec2 vL; varying highp vec2 vR; varying highp vec2 vT; varying highp vec2 vB;
@@ -1227,7 +1269,6 @@
             pressure = createDoubleFBO(simWidth, simHeight, r.internalFormat, r.format, texType, gl.NEAREST);
             initBloomFramebuffers();
         }
-
         function initBloomFramebuffers() {
             let res = getResolution(config.BLOOM_RESOLUTION);
             const texType = ext.halfFloatTexType; const rgba = ext.formatRGBA;
@@ -1242,7 +1283,6 @@
                 bloomFramebuffers.push(fbo);
             }
         }
-
         function createFBO(w, h, internalFormat, format, type, param) {
             gl.activeTexture(gl.TEXTURE0);
             let texture = gl.createTexture();
@@ -1260,7 +1300,6 @@
             return { texture, fbo, width: w, height: h,
                 attach(id) { gl.activeTexture(gl.TEXTURE0 + id); gl.bindTexture(gl.TEXTURE_2D, texture); return id; } };
         }
-
         function createDoubleFBO(w, h, internalFormat, format, type, param) {
             let fbo1 = createFBO(w, h, internalFormat, format, type, param);
             let fbo2 = createFBO(w, h, internalFormat, format, type, param);
@@ -1270,7 +1309,6 @@
                 swap() { let t = fbo1; fbo1 = fbo2; fbo2 = t; }
             };
         }
-
         function resizeFBO(target, w, h, internalFormat, format, type, param) {
             let newFBO = createFBO(w, h, internalFormat, format, type, param);
             clearProgram.bind();
@@ -1279,13 +1317,11 @@
             blit(newFBO.fbo);
             return newFBO;
         }
-
         function resizeDoubleFBO(target, w, h, internalFormat, format, type, param) {
             target.read = resizeFBO(target.read, w, h, internalFormat, format, type, param);
             target.write = createFBO(w, h, internalFormat, format, type, param);
             return target;
         }
-
         function createNoiseTexture(size) {
             const data = new Uint8Array(size * size * 3);
             for (let i = 0; i < data.length; i++) data[i] = Math.floor(Math.random() * 256);
@@ -1349,7 +1385,6 @@
             vPrevX = x; vPrevY = y;
             splat(x, y, dx, dy, virtualColor);
         }
-
         function input() {
             if (splatStack.length > 0) multipleSplats(splatStack.pop());
             for (let i = 0; i < pointers.length; i++) {
@@ -1362,16 +1397,13 @@
                 for (let i = 0; i < pointers.length; i++) pointers[i].color = generateColor();
             }
         }
-
         function step(dt) {
             gl.disable(gl.BLEND);
             gl.viewport(0, 0, simWidth, simHeight);
-
             curlProgram.bind();
             gl.uniform2f(curlProgram.uniforms.texelSize, 1.0 / simWidth, 1.0 / simHeight);
             gl.uniform1i(curlProgram.uniforms.uVelocity, velocity.read.attach(0));
             blit(curl.fbo);
-
             vorticityProgram.bind();
             gl.uniform2f(vorticityProgram.uniforms.texelSize, 1.0 / simWidth, 1.0 / simHeight);
             gl.uniform1i(vorticityProgram.uniforms.uVelocity, velocity.read.attach(0));
@@ -1380,18 +1412,15 @@
             gl.uniform1f(vorticityProgram.uniforms.dt, dt);
             blit(velocity.write.fbo);
             velocity.swap();
-
             divergenceProgram.bind();
             gl.uniform2f(divergenceProgram.uniforms.texelSize, 1.0 / simWidth, 1.0 / simHeight);
             gl.uniform1i(divergenceProgram.uniforms.uVelocity, velocity.read.attach(0));
             blit(divergence.fbo);
-
             clearProgram.bind();
             gl.uniform1i(clearProgram.uniforms.uTexture, pressure.read.attach(0));
             gl.uniform1f(clearProgram.uniforms.value, config.PRESSURE_DISSIPATION);
             blit(pressure.write.fbo);
             pressure.swap();
-
             pressureProgram.bind();
             gl.uniform2f(pressureProgram.uniforms.texelSize, 1.0 / simWidth, 1.0 / simHeight);
             gl.uniform1i(pressureProgram.uniforms.uDivergence, divergence.attach(0));
@@ -1400,14 +1429,12 @@
                 blit(pressure.write.fbo);
                 pressure.swap();
             }
-
             gradienSubtractProgram.bind();
             gl.uniform2f(gradienSubtractProgram.uniforms.texelSize, 1.0 / simWidth, 1.0 / simHeight);
             gl.uniform1i(gradienSubtractProgram.uniforms.uPressure, pressure.read.attach(0));
             gl.uniform1i(gradienSubtractProgram.uniforms.uVelocity, velocity.read.attach(1));
             blit(velocity.write.fbo);
             velocity.swap();
-
             advectionProgram.bind();
             gl.uniform2f(advectionProgram.uniforms.texelSize, 1.0 / simWidth, 1.0 / simHeight);
             if (!ext.supportLinearFiltering)
@@ -1419,7 +1446,6 @@
             gl.uniform1f(advectionProgram.uniforms.dissipation, config.VELOCITY_DISSIPATION);
             blit(velocity.write.fbo);
             velocity.swap();
-
             gl.viewport(0, 0, dyeWidth, dyeHeight);
             if (!ext.supportLinearFiltering)
                 gl.uniform2f(advectionProgram.uniforms.dyeTexelSize, 1.0 / dyeWidth, 1.0 / dyeHeight);
@@ -1429,31 +1455,26 @@
             blit(density.write.fbo);
             density.swap();
         }
-
         function render(target) {
             if (config.BLOOM) applyBloom(density.read, bloom);
             if (target == null || !config.TRANSPARENT) {
                 gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
                 gl.enable(gl.BLEND);
             } else gl.disable(gl.BLEND);
-
             let width = target == null ? gl.drawingBufferWidth : dyeWidth;
             let height = target == null ? gl.drawingBufferHeight : dyeHeight;
             gl.viewport(0, 0, width, height);
-
             if (!config.TRANSPARENT) {
                 colorProgram.bind();
                 let bc = config.BACK_COLOR;
                 gl.uniform4f(colorProgram.uniforms.color, bc.r / 255, bc.g / 255, bc.b / 255, 1);
                 blit(target);
             }
-
             if (target == null && config.TRANSPARENT) {
                 backgroundProgram.bind();
                 gl.uniform1f(backgroundProgram.uniforms.aspectRatio, canvas.width / canvas.height);
                 blit(null);
             }
-
             if (config.SHADING) {
                 let program = config.BLOOM ? displayBloomShadingProgram : displayShadingProgram;
                 program.bind();
@@ -1478,7 +1499,6 @@
             }
             blit(target);
         }
-
         function applyBloom(source, destination) {
             if (bloomFramebuffers.length < 2) return;
             let last = destination;
@@ -1493,7 +1513,6 @@
             gl.uniform1i(bloomPrefilterProgram.uniforms.uTexture, source.attach(0));
             gl.viewport(0, 0, last.width, last.height);
             blit(last.fbo);
-
             bloomBlurProgram.bind();
             for (let i = 0; i < bloomFramebuffers.length; i++) {
                 let dest = bloomFramebuffers[i];
@@ -1503,10 +1522,8 @@
                 blit(dest.fbo);
                 last = dest;
             }
-
             gl.blendFunc(gl.ONE, gl.ONE);
             gl.enable(gl.BLEND);
-
             for (let i = bloomFramebuffers.length - 2; i >= 0; i--) {
                 let baseTex = bloomFramebuffers[i];
                 gl.uniform2f(bloomBlurProgram.uniforms.texelSize, 1.0 / last.width, 1.0 / last.height);
@@ -1515,7 +1532,6 @@
                 blit(baseTex.fbo);
                 last = baseTex;
             }
-
             gl.disable(gl.BLEND);
             bloomFinalProgram.bind();
             gl.uniform2f(bloomFinalProgram.uniforms.texelSize, 1.0 / last.width, 1.0 / last.height);
@@ -1524,7 +1540,6 @@
             gl.viewport(0, 0, destination.width, destination.height);
             blit(destination.fbo);
         }
-
         function splat(x, y, dx, dy, color) {
             gl.viewport(0, 0, simWidth, simHeight);
             splatProgram.bind();
@@ -1535,14 +1550,12 @@
             gl.uniform1f(splatProgram.uniforms.radius, config.SPLAT_RADIUS / 100.0);
             blit(velocity.write.fbo);
             velocity.swap();
-
             gl.viewport(0, 0, dyeWidth, dyeHeight);
             gl.uniform1i(splatProgram.uniforms.uTarget, density.read.attach(0));
             gl.uniform3f(splatProgram.uniforms.color, color.r, color.g, color.b);
             blit(density.write.fbo);
             density.swap();
         }
-
         function multipleSplats(amount) {
             for (let i = 0; i < amount; i++) {
                 const color = generateColor();
@@ -1554,7 +1567,6 @@
                 splat(x, y, dx, dy, color);
             }
         }
-
         function resizeCanvas() {
             if (canvas.width != canvas.clientWidth || canvas.height != canvas.clientHeight) {
                 canvas.width = canvas.clientWidth;
@@ -1562,18 +1574,15 @@
                 initFramebuffers();
             }
         }
-
         function pointerPos(clientX, clientY) {
             const rect = canvas.getBoundingClientRect();
             return { x: clientX - rect.left, y: clientY - rect.top };
         }
-
         const teardown = [];
         function on(target, type, handler, opts) {
             target.addEventListener(type, handler, opts);
             teardown.push(() => target.removeEventListener(type, handler, opts));
         }
-
         on(window, 'mousemove', e => {
             const { x, y } = pointerPos(e.clientX, e.clientY);
             const p = pointers[0];
@@ -1583,7 +1592,6 @@
             p.x = x; p.y = y;
             p.color = generateColor();
         });
-
         on(window, 'touchmove', e => {
             const touches = e.targetTouches;
             for (let i = 0; i < touches.length; i++) {
@@ -1597,7 +1605,6 @@
                 p.x = x; p.y = y;
             }
         }, { passive: true });
-
         on(window, 'touchstart', e => {
             const touches = e.targetTouches;
             for (let i = 0; i < touches.length; i++) {
@@ -1609,9 +1616,7 @@
                 p.color = generateColor();
             }
         }, { passive: true });
-
         on(window, 'mouseup', () => { pointers[0].down = false; });
-
         on(window, 'touchend', e => {
             const touches = e.changedTouches;
             for (let i = 0; i < touches.length; i++)
@@ -1619,20 +1624,17 @@
                     if (touches[i].identifier == pointers[j].id)
                         pointers[j].down = false;
         });
-
         return function destroy() {
             destroyed = true;
             if (rafHandle) cancelAnimationFrame(rafHandle);
             for (const off of teardown) off();
         };
-
         function generateColor() {
             const h = 0.5 + Math.random() * 0.42;
             let c = HSVtoRGB(h, 0.95, 1.0);
             c.r *= 0.92; c.g *= 0.92; c.b *= 0.92;
             return c;
         }
-
         function HSVtoRGB(h, s, v) {
             let r, g, b, i, f, p, q, t;
             i = Math.floor(h * 6);
@@ -1650,7 +1652,6 @@
             }
             return { r, g, b };
         }
-
         function getResolution(resolution) {
             let aspectRatio = gl.drawingBufferWidth / gl.drawingBufferHeight;
             if (aspectRatio < 1) aspectRatio = 1.0 / aspectRatio;
@@ -1659,20 +1660,18 @@
             if (gl.drawingBufferWidth > gl.drawingBufferHeight) return { width: max, height: min };
             else return { width: min, height: max };
         }
-
         function getTextureScale(texture, width, height) {
             return { x: width / texture.width, y: height / texture.height };
         }
     }
   </script>
 
-  <!-- Init + reveal + FULLPAGE scroll logic -->
+  <!-- Init + reveal + FULLPAGE scroll logic (idéntico a tu código que funciona) -->
   <script>
     (function() {
       const canvas = document.getElementById('fluid-canvas');
       if (canvas) fluidSimulation(canvas);
 
-      // ---------- REVEAL hero ----------
       function revealBlock(el, delayMs) {
         if (!el) return;
         el.style.opacity = '0';
@@ -1718,7 +1717,6 @@
       const form = document.querySelector('form');
       if (form) form.addEventListener('submit', e => e.preventDefault());
 
-      // ---------- REVEAL recursos ----------
       const recursosTitle = document.getElementById('recursos-title');
       const recursosSub = document.querySelector('.recursos-sub');
       const recursoCards = document.querySelectorAll('.recurso-card');
@@ -1751,12 +1749,8 @@
         });
       }
 
-      // ---------- PISTA DE SCROLL ----------
       const scrollHint = document.querySelector('.scroll-hint');
 
-      // ============================================================
-      // FULLPAGE LOGIC
-      // ============================================================
       const track = document.getElementById('fullpage-track');
       const sections = Array.from(document.querySelectorAll('.fp-section'));
       const totalSections = sections.length;
@@ -1803,7 +1797,6 @@
 
       applyTransform(0);
 
-      // ---------- Wheel ----------
       let wheelAccum = 0;
       let wheelResetTimer = null;
 
@@ -1811,35 +1804,21 @@
         if (currentIndex === 1 && recursosScroll) {
           const atTop = recursosScroll.scrollTop <= 0;
           const atBottom = Math.ceil(recursosScroll.scrollTop + recursosScroll.clientHeight) >= recursosScroll.scrollHeight;
-
           if (e.deltaY > 0 && !atBottom) return;
           if (e.deltaY < 0 && !atTop) return;
         }
-
-        if (isAnimating) {
-          e.preventDefault();
-          return;
-        }
-
+        if (isAnimating) { e.preventDefault(); return; }
         e.preventDefault();
-
         wheelAccum += e.deltaY;
         clearTimeout(wheelResetTimer);
         wheelResetTimer = setTimeout(() => { wheelAccum = 0; }, 150);
-
         if (Math.abs(wheelAccum) < WHEEL_THRESHOLD) return;
-
         const direction = Math.sign(wheelAccum);
         wheelAccum = 0;
-
-        if (direction > 0 && currentIndex < totalSections - 1) {
-          goToSection(currentIndex + 1);
-        } else if (direction < 0 && currentIndex > 0) {
-          goToSection(currentIndex - 1);
-        }
+        if (direction > 0 && currentIndex < totalSections - 1) goToSection(currentIndex + 1);
+        else if (direction < 0 && currentIndex > 0) goToSection(currentIndex - 1);
       }
 
-      // ---------- Touch ----------
       let touchStartY = 0;
       let touchActive = false;
       let touchInsideRecursosScroll = false;
@@ -1849,43 +1828,29 @@
         if (isAnimating) return;
         touchStartY = e.touches[0].clientY;
         touchActive = true;
-        touchInsideRecursosScroll = currentIndex === 1 && recursosScroll &&
-          e.target && recursosScroll.contains(e.target);
+        touchInsideRecursosScroll = currentIndex === 1 && recursosScroll && e.target && recursosScroll.contains(e.target);
       }
 
       function onTouchMove(e) {
         if (!touchActive) return;
-        if (isAnimating) {
-          e.preventDefault();
-          return;
-        }
-
+        if (isAnimating) { e.preventDefault(); return; }
         if (touchInsideRecursosScroll) {
           const atTop = recursosScroll.scrollTop <= 0;
           const atBottom = Math.ceil(recursosScroll.scrollTop + recursosScroll.clientHeight) >= recursosScroll.scrollHeight;
           const dy = touchStartY - e.touches[0].clientY;
-          if ((dy > 0 && !atBottom) || (dy < 0 && !atTop)) {
-            return;
-          }
+          if ((dy > 0 && !atBottom) || (dy < 0 && !atTop)) return;
         }
-
         const dy = touchStartY - e.touches[0].clientY;
         if (Math.abs(dy) < TOUCH_THRESHOLD) return;
-
         e.preventDefault();
         const direction = Math.sign(dy);
         touchActive = false;
-
-        if (direction > 0 && currentIndex < totalSections - 1) {
-          goToSection(currentIndex + 1);
-        } else if (direction < 0 && currentIndex > 0) {
-          goToSection(currentIndex - 1);
-        }
+        if (direction > 0 && currentIndex < totalSections - 1) goToSection(currentIndex + 1);
+        else if (direction < 0 && currentIndex > 0) goToSection(currentIndex - 1);
       }
 
       function onTouchEnd() { touchActive = false; }
 
-      // ---------- Keyboard ----------
       function onKeyDown(e) {
         if (isAnimating) return;
         if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
@@ -1894,13 +1859,8 @@
         } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
           e.preventDefault();
           if (currentIndex > 0) goToSection(currentIndex - 1);
-        } else if (e.key === 'Home') {
-          e.preventDefault();
-          goToSection(0);
-        } else if (e.key === 'End') {
-          e.preventDefault();
-          goToSection(totalSections - 1);
-        }
+        } else if (e.key === 'Home') { e.preventDefault(); goToSection(0); }
+        else if (e.key === 'End') { e.preventDefault(); goToSection(totalSections - 1); }
       }
 
       dots.forEach(dot => {
@@ -1917,11 +1877,69 @@
       window.addEventListener('keydown', onKeyDown);
 
       document.addEventListener('scroll', () => {
-        if (window.scrollY !== 0 || window.scrollX !== 0) {
-          window.scrollTo(0, 0);
-        }
+        if (window.scrollY !== 0 || window.scrollX !== 0) window.scrollTo(0, 0);
       }, { passive: true });
 
+    })();
+  </script>
+
+  <!-- ⭐ SISTEMA DE ESTRELLAS — IIFE separado y protegido -->
+  <script>
+    (function initStarRatings() {
+      try {
+        const STORAGE_PREFIX = 'flowstate-rating:';
+        const ratings = {};
+
+        document.querySelectorAll('.tool-rating').forEach(container => {
+          const toolId = container.dataset.toolId;
+          let saved = 0;
+          try {
+            const raw = localStorage.getItem(STORAGE_PREFIX + toolId);
+            saved = raw ? parseInt(raw, 10) : 0;
+          } catch (e) { saved = 0; }
+          ratings[toolId] = saved;
+
+          for (let i = 1; i <= 5; i++) {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'star-btn';
+            btn.dataset.value = i;
+            btn.setAttribute('aria-label', `Valorar con ${i} estrella${i > 1 ? 's' : ''}`);
+            btn.textContent = '★';
+
+            btn.addEventListener('mouseenter', () => {
+              container.querySelectorAll('.star-btn').forEach((b, idx) => {
+                b.classList.toggle('is-preview', idx < i && !b.classList.contains('is-filled'));
+              });
+            });
+            btn.addEventListener('mouseleave', () => {
+              container.querySelectorAll('.star-btn').forEach(b => b.classList.remove('is-preview'));
+            });
+            btn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              const newValue = (ratings[toolId] === i) ? 0 : i;
+              ratings[toolId] = newValue;
+              try {
+                if (newValue > 0) localStorage.setItem(STORAGE_PREFIX + toolId, String(newValue));
+                else localStorage.removeItem(STORAGE_PREFIX + toolId);
+              } catch (err) {}
+              renderRating(container, newValue);
+            });
+
+            container.appendChild(btn);
+          }
+          renderRating(container, ratings[toolId]);
+        });
+
+        function renderRating(container, value) {
+          container.querySelectorAll('.star-btn').forEach((btn, idx) => {
+            btn.classList.toggle('is-filled', idx < value);
+          });
+        }
+      } catch (err) {
+        console.warn('Rating system failed (but rest of page works):', err);
+      }
     })();
   </script>
 </body>
