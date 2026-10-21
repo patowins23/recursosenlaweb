@@ -3,30 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Recursos en la web</title>
-  <!-- Onest font -->
+  <title>Flowstate — Deep Work</title>
   <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    /* ----- RESET & ROOT ----- */
-    * {
-      margin: 0;
-      box-sizing: border-box;
-    }
-    html {
-      font-size: 16px;
-    }
-    @media (max-width: 1920px) {
-      html { font-size: 0.833333vw; } /* 16*100/1920 */
-    }
-    @media (max-width: 1440px) {
-      html { font-size: 1.111111vw; } /* 16*100/1440 */
-    }
-    @media (max-width: 1024px) {
-      html { font-size: 1.5625vw; }   /* 16*100/1024 */
-    }
-    @media (max-width: 640px) {
-      html { font-size: 4.444444vw; } /* 16*100/360  */
-    }
+    * { margin: 0; box-sizing: border-box; }
+    html { font-size: 16px; }
+    @media (max-width: 1920px) { html { font-size: 0.833333vw; } }
+    @media (max-width: 1440px) { html { font-size: 1.111111vw; } }
+    @media (max-width: 1024px) { html { font-size: 1.5625vw; } }
+    @media (max-width: 640px)  { html { font-size: 4.444444vw; } }
 
     :root {
       --hero-base:            #04050c;
@@ -44,15 +29,29 @@
       --ease-entrance:       cubic-bezier(0.2, 0, 0, 1);
     }
 
+    /* ============================================================
+       FULLPAGE: bloqueamos el scroll nativo del documento
+       ============================================================ */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;                /* el documento NO hace scroll nativo */
+      overscroll-behavior: none;
+      scrollbar-width: none;           /* Firefox */
+    }
+    html::-webkit-scrollbar, body::-webkit-scrollbar {
+      display: none;                   /* Chrome / Safari */
+    }
+
     body {
       font-family: "Onest", sans-serif;
       background: var(--hero-base);
       color: var(--heading);
-      overflow-x: hidden;
       line-height: 1.4;
     }
 
-    /* remove default anchor/button styling */
     a, button, input {
       font-family: inherit;
       text-decoration: none;
@@ -61,32 +60,49 @@
       border: none;
       cursor: pointer;
     }
-    button, input[type="submit"] {
-      cursor: pointer;
+
+    /* ============================================================
+       CONTENEDOR FULLPAGE
+       ============================================================ */
+    .fullpage {
+      position: relative;
+      width: 100vw;
+      height: 100lvh;
+      overflow: hidden;
     }
 
-    /* ----- HERO SECTION ----- */
-    section {
+    .fullpage-track {
       position: relative;
+      width: 100%;
+      height: 100%;
+      will-change: transform;
+      transition: transform 1000ms cubic-bezier(0.76, 0, 0.24, 1);
+    }
+
+    .fp-section {
+      position: relative;
+      width: 100vw;
+      height: 100lvh;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 100lvh;
-      width: 100vw;
-      overflow: hidden;
+    }
+
+    /* ============================================================
+       SECCIÓN 1 — HERO
+       ============================================================ */
+    .hero-section {
       background: var(--hero-base);
       text-align: center;
       padding: 0 1.25rem;
     }
     @media (min-width: 640px) {
-      section {
-        padding: 0 2.5rem;
-      }
+      .hero-section { padding: 0 2.5rem; }
     }
 
-    /* ----- CANVAS (z-0) ----- */
-    canvas {
+    canvas#fluid-canvas {
       position: absolute;
       inset: 0;
       width: 100%;
@@ -96,7 +112,6 @@
       display: block;
     }
 
-    /* ----- SCRIM (z-1) ----- */
     .scrim {
       position: absolute;
       inset: 0;
@@ -109,7 +124,6 @@
         var(--scrim-soft) 100%);
     }
 
-    /* ----- TOP NAV (z-20) ----- */
     header {
       position: absolute;
       inset-inline: 0;
@@ -121,9 +135,7 @@
       padding: 1.25rem;
     }
     @media (min-width: 640px) {
-      header {
-        padding: 1.75rem 2.5rem;
-      }
+      header { padding: 1.75rem 2.5rem; }
     }
 
     .brand {
@@ -135,27 +147,11 @@
       color: var(--on-media);
       letter-spacing: -0.01em;
     }
-    @media (min-width: 640px) {
-      .brand {
-        font-size: 1.375rem;
-      }
-    }
-    .brand svg {
-      width: 1.35rem;
-      height: 1.35rem;
-      stroke: currentColor;
-    }
-    @media (min-width: 640px) {
-      .brand svg {
-        width: 1.5rem;
-        height: 1.5rem;
-      }
-    }
+    @media (min-width: 640px) { .brand { font-size: 1.375rem; } }
+    .brand svg { width: 1.35rem; height: 1.35rem; stroke: currentColor; }
+    @media (min-width: 640px) { .brand svg { width: 1.5rem; height: 1.5rem; } }
 
-    /* glass link pill — hidden below 640px */
-    .nav-pill {
-      display: none;
-    }
+    .nav-pill { display: none; }
     @media (min-width: 640px) {
       .nav-pill {
         display: flex;
@@ -177,12 +173,9 @@
         transition: color var(--duration-fast) var(--ease-entrance);
         white-space: nowrap;
       }
-      .nav-pill a:hover {
-        color: var(--heading);
-      }
+      .nav-pill a:hover { color: var(--heading); }
     }
 
-    /* shared white pill button */
     .pill-white {
       display: inline-flex;
       align-items: center;
@@ -198,22 +191,15 @@
       transition: background var(--duration-fast) var(--ease-entrance);
       white-space: nowrap;
     }
-    .pill-white:hover {
-      background: rgba(255,255,255,0.85);
-    }
+    .pill-white:hover { background: rgba(255,255,255,0.85); }
     .pill-white:focus-visible {
       outline: none;
       box-shadow: 0 0 0 2px rgba(255,255,255,.7);
     }
     @media (min-width: 640px) {
-      .pill-white {
-        height: 2.75rem;
-        padding: 0 1.375rem;
-        font-size: 0.95rem;
-      }
+      .pill-white { height: 2.75rem; padding: 0 1.375rem; font-size: 0.95rem; }
     }
 
-    /* ----- CENTER COLUMN (z-10) ----- */
     .center-col {
       position: relative;
       z-index: 10;
@@ -223,16 +209,8 @@
       width: 100%;
       max-width: 22rem;
     }
-    @media (min-width: 640px) {
-      .center-col {
-        max-width: 40rem;
-      }
-    }
-    @media (min-width: 1024px) {
-      .center-col {
-        max-width: 52rem;
-      }
-    }
+    @media (min-width: 640px) { .center-col { max-width: 40rem; } }
+    @media (min-width: 1024px) { .center-col { max-width: 52rem; } }
 
     .badge {
       display: inline-flex;
@@ -245,11 +223,7 @@
       color: var(--body-muted);
       backdrop-filter: blur(12px);
     }
-    @media (min-width: 640px) {
-      .badge {
-        font-size: 0.8rem;
-      }
-    }
+    @media (min-width: 640px) { .badge { font-size: 0.8rem; } }
 
     h1 {
       margin-top: 1.25rem;
@@ -261,19 +235,8 @@
       color: var(--heading);
       text-align: center;
     }
-    @media (min-width: 640px) {
-      h1 {
-        margin-top: 1.75rem;
-        max-width: 34rem;
-        font-size: 3.5rem;
-      }
-    }
-    @media (min-width: 1024px) {
-      h1 {
-        max-width: 46rem;
-        font-size: 5rem;
-      }
-    }
+    @media (min-width: 640px) { h1 { margin-top: 1.75rem; max-width: 34rem; font-size: 3.5rem; } }
+    @media (min-width: 1024px) { h1 { max-width: 46rem; font-size: 5rem; } }
 
     .subline {
       margin-top: 1rem;
@@ -282,36 +245,17 @@
       line-height: 1.5;
       color: var(--body-muted);
     }
-    @media (min-width: 640px) {
-      .subline {
-        margin-top: 1.25rem;
-        max-width: 34rem;
-        font-size: 1.1rem;
-      }
-    }
-    @media (min-width: 1024px) {
-      .subline {
-        max-width: none;
-        font-size: 1.2rem;
-      }
-    }
+    @media (min-width: 640px) { .subline { margin-top: 1.25rem; max-width: 34rem; font-size: 1.1rem; } }
+    @media (min-width: 1024px) { .subline { max-width: none; font-size: 1.2rem; } }
 
-    /* waitlist form */
     .waitlist {
       margin-top: 1.75rem;
       display: flex;
       justify-content: center;
       width: 100%;
     }
-    @media (min-width: 640px) {
-      .waitlist {
-        margin-top: 2.5rem;
-      }
-    }
-    .waitlist form {
-      width: 37rem;
-      max-width: 100%;
-    }
+    @media (min-width: 640px) { .waitlist { margin-top: 2.5rem; } }
+    .waitlist form { width: 37rem; max-width: 100%; }
     .glass-bar {
       display: flex;
       align-items: center;
@@ -325,11 +269,7 @@
       padding-right: 0.35rem;
     }
     @media (min-width: 640px) {
-      .glass-bar {
-        height: 4rem;
-        padding-left: 1.5rem;
-        padding-right: 0.4rem;
-      }
+      .glass-bar { height: 4rem; padding-left: 1.5rem; padding-right: 0.4rem; }
     }
     .glass-bar input {
       flex: 1;
@@ -341,21 +281,10 @@
       outline: none;
       border: none;
     }
-    @media (min-width: 640px) {
-      .glass-bar input {
-        font-size: 1.15rem;
-      }
-    }
-    .glass-bar input::placeholder {
-      color: var(--body-muted);
-      opacity: 1;
-    }
-    .glass-bar .pill-white {
-      margin-left: 0.5rem;
-      flex-shrink: 0;
-    }
+    @media (min-width: 640px) { .glass-bar input { font-size: 1.15rem; } }
+    .glass-bar input::placeholder { color: var(--body-muted); opacity: 1; }
+    .glass-bar .pill-white { margin-left: 0.5rem; flex-shrink: 0; }
 
-    /* footer (z-20) */
     footer {
       position: absolute;
       inset-inline: 0;
@@ -368,128 +297,317 @@
       color: var(--body-muted);
     }
     @media (min-width: 640px) {
-      footer {
-        padding: 1.5rem 2.5rem;
-        font-size: 0.8rem;
-      }
+      footer { padding: 1.5rem 2.5rem; font-size: 0.8rem; }
     }
 
-    /* ----- REVEAL ANIMATIONS (initial hidden) ----- */
-    .reveal {
-      opacity: 0;
-      will-change: opacity, transform;
+    .reveal { opacity: 0; will-change: opacity, transform; }
+    .word-span { display: inline-block; opacity: 0; will-change: opacity, transform; }
+
+    /* ============================================================
+       SECCIÓN 2 — RECURSOS
+       ============================================================ */
+    .recursos-section {
+      background: var(--hero-base);
+      text-align: center;
+      padding: 5rem 1.25rem;
     }
-    .reveal-ready {
-      opacity: 1;
-      transform: translateY(0) !important;
+    @media (min-width: 640px) {
+      .recursos-section { padding: 5rem 2.5rem; }
     }
-    /* heading & subline word spans */
-    .word-span {
-      display: inline-block;
-      opacity: 0;
-      will-change: opacity, transform;
+
+    .recursos-section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: radial-gradient(90% 70% at 50% 30%,
+        rgba(60, 80, 200, 0.10) 0%,
+        rgba(120, 40, 180, 0.06) 40%,
+        transparent 75%);
     }
-    .word-span-ready {
-      opacity: 1;
-      transform: translateY(0) !important;
+
+    .recursos-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 52rem;
+    }
+
+    .recursos-title {
+      font-weight: 500;
+      font-size: 2rem;
+      letter-spacing: -0.02em;
+      color: var(--heading);
+      line-height: 1.1;
+      text-align: center;
+    }
+    @media (min-width: 640px) { .recursos-title { font-size: 3.5rem; } }
+    @media (min-width: 1024px) { .recursos-title { font-size: 5rem; } }
+
+    .recursos-sub {
+      margin-top: 1rem;
+      max-width: 30rem;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: var(--body-muted);
+    }
+    @media (min-width: 640px) {
+      .recursos-sub { margin-top: 1.25rem; font-size: 1.1rem; max-width: 36rem; }
+    }
+
+    .recursos-grid {
+      margin-top: 2.5rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      width: 100%;
+    }
+    @media (min-width: 640px) {
+      .recursos-grid { grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
+    }
+    @media (min-width: 1024px) {
+      .recursos-grid { grid-template-columns: repeat(3, 1fr); margin-top: 3rem; }
+    }
+
+    .recurso-card {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      gap: 0.5rem;
+      padding: 1.25rem 1.25rem 1.5rem;
+      border-radius: 1.25rem;
+      border: 1px solid var(--glass-border);
+      background: var(--glass-fill);
+      backdrop-filter: blur(12px);
+      color: var(--heading);
+      transition: transform var(--duration-fast) var(--ease-entrance),
+                  background var(--duration-fast) var(--ease-entrance),
+                  border-color var(--duration-fast) var(--ease-entrance);
+    }
+    .recurso-card:hover {
+      transform: translateY(-3px);
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.26);
+    }
+    .recurso-card h3 {
+      font-size: 1.05rem;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+    .recurso-card p {
+      font-size: 0.9rem;
+      color: var(--body-muted);
+      line-height: 1.45;
+    }
+    .recurso-card .tag {
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--body-muted);
+      opacity: 0.8;
+    }
+
+    /* Indicador de scroll */
+    .scroll-hint {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--body-muted);
+      opacity: 0.85;
+      pointer-events: none;
+      animation: scrollHintBounce 2.4s ease-in-out infinite;
+      transition: opacity 300ms ease;
+    }
+    .scroll-hint svg {
+      width: 1rem;
+      height: 1rem;
+      stroke: currentColor;
+    }
+    @keyframes scrollHintBounce {
+      0%, 100% { transform: translate(-50%, 0); opacity: 0.85; }
+      50%      { transform: translate(-50%, 6px); opacity: 0.45; }
+    }
+
+    /* Puntos de navegación lateral */
+    .fp-dots {
+      position: fixed;
+      right: 1.25rem;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      pointer-events: auto;
+    }
+    @media (min-width: 640px) {
+      .fp-dots { right: 2rem; }
+    }
+    .fp-dot {
+      width: 0.5rem;
+      height: 0.5rem;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: background var(--duration-fast) var(--ease-entrance), transform var(--duration-fast) var(--ease-entrance);
+    }
+    .fp-dot.active {
+      background: rgba(255,255,255,0.95);
+      transform: scale(1.3);
+    }
+    .fp-dot:hover {
+      background: rgba(255,255,255,0.7);
     }
   </style>
 </head>
 <body>
-  <section>
-    <!-- 1. Fluid canvas -->
-    <canvas id="fluid-canvas" aria-hidden="true"></canvas>
 
-    <!-- 2. Scrim -->
-    <div class="scrim" aria-hidden="true"></div>
+  <div class="fullpage">
+    <div class="fullpage-track" id="fullpage-track">
 
-    <!-- 3. Top nav -->
-    <header id="main-header" class="reveal" style="transform: translateY(-0.75rem);">
-      <a href="/" class="brand">
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M2.5 9c2.5 0 2.5 4.2 5 4.2S10 9 12 9s2.5 4.2 5 4.2S19.5 9 21.5 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-          <path d="M2.5 15c2.5 0 2.5 4.2 5 4.2S10 15 12 15s2.5 4.2 5 4.2S19.5 15 21.5 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity="0.5"/>
-        </svg>
-        Recursos en la WEB
-      </a>
+      <!-- ==================== SECCIÓN 1 — HERO ==================== -->
+      <section class="fp-section hero-section" id="hero" data-index="0">
+        <canvas id="fluid-canvas" aria-hidden="true"></canvas>
+        <div class="scrim" aria-hidden="true"></div>
 
-      <div class="nav-pill">
-        <a href="#how-it-works">How it works?</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#products">Products</a>
-        <a href="#blog">Blog</a>
-      </div>
+        <header id="main-header" class="reveal" style="transform: translateY(-0.75rem);">
+          <a href="/" class="brand">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M2.5 9c2.5 0 2.5 4.2 5 4.2S10 9 12 9s2.5 4.2 5 4.2S19.5 9 21.5 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M2.5 15c2.5 0 2.5 4.2 5 4.2S10 15 12 15s2.5 4.2 5 4.2S19.5 15 21.5 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity="0.5"/>
+            </svg>
+            Flowstate
+          </a>
 
-      <a href="#get-started" class="pill-white">Get Started</a>
-    </header>
-
-    <!-- 4. Center column -->
-    <div class="center-col">
-      <!-- Badge -->
-      <p id="badge-pill" class="badge reveal" style="transform: translateY(1.25rem);">
-        10K+ already in flow
-      </p>
-
-      <!-- Heading (word-by-word) -->
-      <h1 id="main-heading" aria-label="Deep Work in a Distracted World">
-        <span class="word-span" data-word-index="0">Deep</span>
-        <span class="word-span" data-word-index="1">Work</span>
-        <span class="word-span" data-word-index="2">in</span>
-        <span class="word-span" data-word-index="3">a</span>
-        <span class="word-span" data-word-index="4">Distracted</span>
-        <span class="word-span" data-word-index="5">World</span>
-      </h1>
-
-      <!-- Sub-line (word-by-word) -->
-      <p id="subline" class="subline" aria-label="Cut through the noise, reclaim your attention, and do work that truly matters.">
-        <span class="word-span" data-word-index="0">Cut</span>
-        <span class="word-span" data-word-index="1">through</span>
-        <span class="word-span" data-word-index="2">the</span>
-        <span class="word-span" data-word-index="3">noise,</span>
-        <span class="word-span" data-word-index="4">reclaim</span>
-        <span class="word-span" data-word-index="5">your</span>
-        <span class="word-span" data-word-index="6">attention,</span>
-        <span class="word-span" data-word-index="7">and</span>
-        <span class="word-span" data-word-index="8">do</span>
-        <span class="word-span" data-word-index="9">work</span>
-        <span class="word-span" data-word-index="10">that</span>
-        <span class="word-span" data-word-index="11">truly</span>
-        <span class="word-span" data-word-index="12">matters.</span>
-      </p>
-
-      <!-- Waitlist form -->
-      <div id="waitlist-form-wrap" class="waitlist reveal" style="transform: translateY(1.25rem);">
-        <form>
-          <div class="glass-bar">
-            <input type="email" required placeholder="Enter your email" autocomplete="email">
-            <button type="submit" class="pill-white">Join Waitlist</button>
+          <div class="nav-pill">
+            <a href="#how-it-works">How it works?</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#products">Products</a>
+            <a href="#blog">Blog</a>
           </div>
-        </form>
-      </div>
+
+          <a href="#get-started" class="pill-white">Get Started</a>
+        </header>
+
+        <div class="center-col">
+          <p id="badge-pill" class="badge reveal" style="transform: translateY(1.25rem);">
+            10K+ already in flow
+          </p>
+
+          <h1 id="main-heading" aria-label="Deep Work in a Distracted World">
+            <span class="word-span">Deep</span>
+            <span class="word-span">Work</span>
+            <span class="word-span">in</span>
+            <span class="word-span">a</span>
+            <span class="word-span">Distracted</span>
+            <span class="word-span">World</span>
+          </h1>
+
+          <p id="subline" class="subline" aria-label="Cut through the noise, reclaim your attention, and do work that truly matters.">
+            <span class="word-span">Cut</span>
+            <span class="word-span">through</span>
+            <span class="word-span">the</span>
+            <span class="word-span">noise,</span>
+            <span class="word-span">reclaim</span>
+            <span class="word-span">your</span>
+            <span class="word-span">attention,</span>
+            <span class="word-span">and</span>
+            <span class="word-span">do</span>
+            <span class="word-span">work</span>
+            <span class="word-span">that</span>
+            <span class="word-span">truly</span>
+            <span class="word-span">matters.</span>
+          </p>
+
+          <div id="waitlist-form-wrap" class="waitlist reveal" style="transform: translateY(1.25rem);">
+            <form>
+              <div class="glass-bar">
+                <input type="email" required placeholder="Enter your email" autocomplete="email">
+                <button type="submit" class="pill-white">Join Waitlist</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <footer id="main-footer" class="reveal" style="transform: translateY(1.25rem);">
+          © 2026 Flowstate — engineered for deep work.
+        </footer>
+
+        <div class="scroll-hint" aria-hidden="true">
+          <span>Scroll</span>
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </section>
+
+      <!-- ==================== SECCIÓN 2 — RECURSOS ==================== -->
+      <section class="fp-section recursos-section" id="recursos" data-index="1">
+        <div class="recursos-inner">
+          <h2 class="recursos-title" id="recursos-title">Recursos</h2>
+          <p class="recursos-sub">
+            Herramientas, guías y material seleccionado para ayudarte a entrar en flow y mantener tu atención enfocada.
+          </p>
+
+          <div class="recursos-grid">
+            <a href="#" class="recurso-card">
+              <span class="tag">Guía</span>
+              <h3>El arte del deep work</h3>
+              <p>Principios prácticos para sesiones de concentración profunda de 90 minutos.</p>
+            </a>
+            <a href="#" class="recurso-card">
+              <span class="tag">Herramienta</span>
+              <h3>Focus timer</h3>
+              <p>Un temporizador minimalista diseñado para no romper tu estado de flow.</p>
+            </a>
+            <a href="#" class="recurso-card">
+              <span class="tag">Lectura</span>
+              <h3>Diseñando tu entorno</h3>
+              <p>Cómo reducir la fricción y las distracciones digitales en tu espacio de trabajo.</p>
+            </a>
+          </div>
+        </div>
+      </section>
+
     </div>
+  </div>
 
-    <!-- 5. Footer -->
-    <footer id="main-footer" class="reveal" style="transform: translateY(1.25rem);">
-      © 2026 Flowstate — engineered for deep work.
-    </footer>
-  </section>
+  <!-- Puntos de navegación lateral -->
+  <div class="fp-dots" id="fp-dots" aria-label="Navegación de secciones">
+    <button class="fp-dot active" data-index="0" aria-label="Ir a inicio"></button>
+    <button class="fp-dot" data-index="1" aria-label="Ir a recursos"></button>
+  </div>
 
-  <!-- Lenis smooth scroll -->
+  <!-- Lenis smooth scroll (mantenido por paridad, aunque el documento no scrollea) -->
   <script type="importmap">
     { "imports": { "lenis": "https://unpkg.com/lenis@1.3.19/dist/lenis.mjs" } }
   </script>
 
   <script type="module">
     import Lenis from "lenis";
-    const lenis = new Lenis({ smoothWheel: true });
-    function raf(t) {
-      lenis.raf(t);
-      requestAnimationFrame(raf);
-    }
+    const lenis = new Lenis({ smoothWheel: false, smoothTouch: false });
+    function raf(t) { lenis.raf(t); requestAnimationFrame(raf); }
     requestAnimationFrame(raf);
+    // No usamos lenis para el documento (está oculto); solo por si acaso.
   </script>
 
-  <!-- Fluid simulation (verbatim engine) -->
+  <!-- Fluid simulation (engine verbatim) -->
   <script>
     function fluidSimulation(canvas) {
         canvas.width = canvas.clientWidth;
@@ -544,12 +662,10 @@
 
         function getWebGLContext(canvas) {
             const params = { alpha: true, depth: false, stencil: false, antialias: false, preserveDrawingBuffer: false };
-
             let gl = canvas.getContext('webgl2', params);
             const isWebGL2 = !!gl;
             if (!isWebGL2)
                 gl = canvas.getContext('webgl', params) || canvas.getContext('experimental-webgl', params);
-
             let halfFloat;
             let supportLinearFiltering;
             if (isWebGL2) {
@@ -559,53 +675,30 @@
                 halfFloat = gl.getExtension('OES_texture_half_float');
                 supportLinearFiltering = gl.getExtension('OES_texture_half_float_linear');
             }
-
             gl.clearColor(0.0, 0.0, 0.0, 1.0);
-
             const halfFloatTexType = isWebGL2 ? gl.HALF_FLOAT : halfFloat.HALF_FLOAT_OES;
-            let formatRGBA;
-            let formatRG;
-            let formatR;
-
+            let formatRGBA, formatRG, formatR;
             if (isWebGL2) {
                 formatRGBA = getSupportedFormat(gl, gl.RGBA16F, gl.RGBA, halfFloatTexType);
                 formatRG = getSupportedFormat(gl, gl.RG16F, gl.RG, halfFloatTexType);
                 formatR = getSupportedFormat(gl, gl.R16F, gl.RED, halfFloatTexType);
-            }
-            else {
+            } else {
                 formatRGBA = getSupportedFormat(gl, gl.RGBA, gl.RGBA, halfFloatTexType);
                 formatRG = getSupportedFormat(gl, gl.RGBA, gl.RGBA, halfFloatTexType);
                 formatR = getSupportedFormat(gl, gl.RGBA, gl.RGBA, halfFloatTexType);
             }
-
-            return {
-                gl,
-                ext: {
-                    formatRGBA,
-                    formatRG,
-                    formatR,
-                    halfFloatTexType,
-                    supportLinearFiltering
-                }
-            };
+            return { gl, ext: { formatRGBA, formatRG, formatR, halfFloatTexType, supportLinearFiltering } };
         }
 
         function getSupportedFormat(gl, internalFormat, format, type) {
             if (!supportRenderTextureFormat(gl, internalFormat, format, type)) {
                 switch (internalFormat) {
-                    case gl.R16F:
-                        return getSupportedFormat(gl, gl.RG16F, gl.RG, type);
-                    case gl.RG16F:
-                        return getSupportedFormat(gl, gl.RGBA16F, gl.RGBA, type);
-                    default:
-                        return null;
+                    case gl.R16F: return getSupportedFormat(gl, gl.RG16F, gl.RG, type);
+                    case gl.RG16F: return getSupportedFormat(gl, gl.RGBA16F, gl.RGBA, type);
+                    default: return null;
                 }
             }
-
-            return {
-                internalFormat,
-                format
-            };
+            return { internalFormat, format };
         }
 
         function supportRenderTextureFormat(gl, internalFormat, format, type) {
@@ -616,68 +709,45 @@
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
             gl.texImage2D(gl.TEXTURE_2D, 0, internalFormat, 4, 4, 0, format, type, null);
-
             let fbo = gl.createFramebuffer();
             gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
             gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
-
-            const status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
-            if (status != gl.FRAMEBUFFER_COMPLETE)
-                return false;
-            return true;
+            return gl.checkFramebufferStatus(gl.FRAMEBUFFER) == gl.FRAMEBUFFER_COMPLETE;
         }
 
-        function clamp01(input) {
-            return Math.min(Math.max(input, 0), 1);
-        }
-
-        function isMobile() {
-            return /Mobi|Android/i.test(navigator.userAgent);
-        }
+        function isMobile() { return /Mobi|Android/i.test(navigator.userAgent); }
 
         class GLProgram {
-            constructor(vertexShader, fragmentShader) {
+            constructor(vs, fs) {
                 this.uniforms = {};
                 this.program = gl.createProgram();
-
-                gl.attachShader(this.program, vertexShader);
-                gl.attachShader(this.program, fragmentShader);
+                gl.attachShader(this.program, vs);
+                gl.attachShader(this.program, fs);
                 gl.linkProgram(this.program);
-
                 if (!gl.getProgramParameter(this.program, gl.LINK_STATUS))
                     throw gl.getProgramInfoLog(this.program);
-
-                const uniformCount = gl.getProgramParameter(this.program, gl.ACTIVE_UNIFORMS);
-                for (let i = 0; i < uniformCount; i++) {
-                    const uniformName = gl.getActiveUniform(this.program, i).name;
-                    this.uniforms[uniformName] = gl.getUniformLocation(this.program, uniformName);
+                const n = gl.getProgramParameter(this.program, gl.ACTIVE_UNIFORMS);
+                for (let i = 0; i < n; i++) {
+                    const name = gl.getActiveUniform(this.program, i).name;
+                    this.uniforms[name] = gl.getUniformLocation(this.program, name);
                 }
             }
-
-            bind() {
-                gl.useProgram(this.program);
-            }
+            bind() { gl.useProgram(this.program); }
         }
 
         function compileShader(type, source) {
-            const shader = gl.createShader(type);
-            gl.shaderSource(shader, source);
-            gl.compileShader(shader);
-
-            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS))
-                throw gl.getShaderInfoLog(shader);
-
-            return shader;
-        };
+            const s = gl.createShader(type);
+            gl.shaderSource(s, source);
+            gl.compileShader(s);
+            if (!gl.getShaderParameter(s, gl.COMPILE_STATUS))
+                throw gl.getShaderInfoLog(s);
+            return s;
+        }
 
         const baseVertexShader = compileShader(gl.VERTEX_SHADER, `
             precision highp float;
             attribute vec2 aPosition;
-            varying vec2 vUv;
-            varying vec2 vL;
-            varying vec2 vR;
-            varying vec2 vT;
-            varying vec2 vB;
+            varying vec2 vUv; varying vec2 vL; varying vec2 vR; varying vec2 vT; varying vec2 vB;
             uniform vec2 texelSize;
             void main () {
                 vUv = aPosition * 0.5 + 0.5;
@@ -690,30 +760,19 @@
         `);
 
         const clearShader = compileShader(gl.FRAGMENT_SHADER, `
-            precision mediump float;
-            precision mediump sampler2D;
-            varying highp vec2 vUv;
-            uniform sampler2D uTexture;
-            uniform float value;
-            void main () {
-                gl_FragColor = value * texture2D(uTexture, vUv);
-            }
+            precision mediump float; precision mediump sampler2D;
+            varying highp vec2 vUv; uniform sampler2D uTexture; uniform float value;
+            void main () { gl_FragColor = value * texture2D(uTexture, vUv); }
         `);
 
         const colorShader = compileShader(gl.FRAGMENT_SHADER, `
-            precision mediump float;
-            uniform vec4 color;
-            void main () {
-                gl_FragColor = color;
-            }
+            precision mediump float; uniform vec4 color;
+            void main () { gl_FragColor = color; }
         `);
 
         const backgroundShader = compileShader(gl.FRAGMENT_SHADER, `
-            precision highp float;
-            precision highp sampler2D;
-            varying vec2 vUv;
-            uniform sampler2D uTexture;
-            uniform float aspectRatio;
+            precision highp float; precision highp sampler2D;
+            varying vec2 vUv; uniform sampler2D uTexture; uniform float aspectRatio;
             #define SCALE 25.0
             void main () {
                 vec2 uv = floor(vUv * SCALE * vec2(aspectRatio, 1.0));
@@ -724,10 +783,8 @@
         `);
 
         const displayShader = compileShader(gl.FRAGMENT_SHADER, `
-            precision highp float;
-            precision highp sampler2D;
-            varying vec2 vUv;
-            uniform sampler2D uTexture;
+            precision highp float; precision highp sampler2D;
+            varying vec2 vUv; uniform sampler2D uTexture;
             void main () {
                 vec3 C = texture2D(uTexture, vUv).rgb;
                 float a = max(C.r, max(C.g, C.b));
@@ -736,13 +793,8 @@
         `);
 
         const displayBloomShader = compileShader(gl.FRAGMENT_SHADER, `
-            precision highp float;
-            precision highp sampler2D;
-            varying vec2 vUv;
-            uniform sampler2D uTexture;
-            uniform sampler2D uBloom;
-            uniform sampler2D uDithering;
-            uniform vec2 ditherScale;
+            precision highp float; precision highp sampler2D;
+            varying vec2 vUv; uniform sampler2D uTexture; uniform sampler2D uBloom; uniform sampler2D uDithering; uniform vec2 ditherScale;
             void main () {
                 vec3 C = texture2D(uTexture, vUv).rgb;
                 vec3 bloom = texture2D(uBloom, vUv).rgb;
@@ -757,15 +809,9 @@
         `);
 
         const displayShadingShader = compileShader(gl.FRAGMENT_SHADER, `
-            precision highp float;
-            precision highp sampler2D;
-            varying vec2 vUv;
-            varying vec2 vL;
-            varying vec2 vR;
-            varying vec2 vT;
-            varying vec2 vB;
-            uniform sampler2D uTexture;
-            uniform vec2 texelSize;
+            precision highp float; precision highp sampler2D;
+            varying vec2 vUv; varying vec2 vL; varying vec2 vR; varying vec2 vT; varying vec2 vB;
+            uniform sampler2D uTexture; uniform vec2 texelSize;
             void main () {
                 vec3 L = texture2D(uTexture, vL).rgb;
                 vec3 R = texture2D(uTexture, vR).rgb;
@@ -784,18 +830,9 @@
         `);
 
         const displayBloomShadingShader = compileShader(gl.FRAGMENT_SHADER, `
-            precision highp float;
-            precision highp sampler2D;
-            varying vec2 vUv;
-            varying vec2 vL;
-            varying vec2 vR;
-            varying vec2 vT;
-            varying vec2 vB;
-            uniform sampler2D uTexture;
-            uniform sampler2D uBloom;
-            uniform sampler2D uDithering;
-            uniform vec2 ditherScale;
-            uniform vec2 texelSize;
+            precision highp float; precision highp sampler2D;
+            varying vec2 vUv; varying vec2 vL; varying vec2 vR; varying vec2 vT; varying vec2 vB;
+            uniform sampler2D uTexture; uniform sampler2D uBloom; uniform sampler2D uDithering; uniform vec2 ditherScale; uniform vec2 texelSize;
             void main () {
                 vec3 L = texture2D(uTexture, vL).rgb;
                 vec3 R = texture2D(uTexture, vR).rgb;
@@ -820,12 +857,8 @@
         `);
 
         const bloomPrefilterShader = compileShader(gl.FRAGMENT_SHADER, `
-            precision mediump float;
-            precision mediump sampler2D;
-            varying vec2 vUv;
-            uniform sampler2D uTexture;
-            uniform vec3 curve;
-            uniform float threshold;
+            precision mediump float; precision mediump sampler2D;
+            varying vec2 vUv; uniform sampler2D uTexture; uniform vec3 curve; uniform float threshold;
             void main () {
                 vec3 c = texture2D(uTexture, vUv).rgb;
                 float br = max(c.r, max(c.g, c.b));
@@ -837,13 +870,8 @@
         `);
 
         const bloomBlurShader = compileShader(gl.FRAGMENT_SHADER, `
-            precision mediump float;
-            precision mediump sampler2D;
-            varying vec2 vL;
-            varying vec2 vR;
-            varying vec2 vT;
-            varying vec2 vB;
-            uniform sampler2D uTexture;
+            precision mediump float; precision mediump sampler2D;
+            varying vec2 vL; varying vec2 vR; varying vec2 vT; varying vec2 vB; uniform sampler2D uTexture;
             void main () {
                 vec4 sum = vec4(0.0);
                 sum += texture2D(uTexture, vL);
@@ -856,14 +884,8 @@
         `);
 
         const bloomFinalShader = compileShader(gl.FRAGMENT_SHADER, `
-            precision mediump float;
-            precision mediump sampler2D;
-            varying vec2 vL;
-            varying vec2 vR;
-            varying vec2 vT;
-            varying vec2 vB;
-            uniform sampler2D uTexture;
-            uniform float intensity;
+            precision mediump float; precision mediump sampler2D;
+            varying vec2 vL; varying vec2 vR; varying vec2 vT; varying vec2 vB; uniform sampler2D uTexture; uniform float intensity;
             void main () {
                 vec4 sum = vec4(0.0);
                 sum += texture2D(uTexture, vL);
@@ -876,14 +898,8 @@
         `);
 
         const splatShader = compileShader(gl.FRAGMENT_SHADER, `
-            precision highp float;
-            precision highp sampler2D;
-            varying vec2 vUv;
-            uniform sampler2D uTarget;
-            uniform float aspectRatio;
-            uniform vec3 color;
-            uniform vec2 point;
-            uniform float radius;
+            precision highp float; precision highp sampler2D;
+            varying vec2 vUv; uniform sampler2D uTarget; uniform float aspectRatio; uniform vec3 color; uniform vec2 point; uniform float radius;
             void main () {
                 vec2 p = vUv - point.xy;
                 p.x *= aspectRatio;
@@ -894,15 +910,9 @@
         `);
 
         const advectionManualFilteringShader = compileShader(gl.FRAGMENT_SHADER, `
-            precision highp float;
-            precision highp sampler2D;
-            varying vec2 vUv;
-            uniform sampler2D uVelocity;
-            uniform sampler2D uSource;
-            uniform vec2 texelSize;
-            uniform vec2 dyeTexelSize;
-            uniform float dt;
-            uniform float dissipation;
+            precision highp float; precision highp sampler2D;
+            varying vec2 vUv; uniform sampler2D uVelocity; uniform sampler2D uSource;
+            uniform vec2 texelSize; uniform vec2 dyeTexelSize; uniform float dt; uniform float dissipation;
             vec4 bilerp (sampler2D sam, vec2 uv, vec2 tsize) {
                 vec2 st = uv / tsize - 0.5;
                 vec2 iuv = floor(st);
@@ -921,14 +931,9 @@
         `);
 
         const advectionShader = compileShader(gl.FRAGMENT_SHADER, `
-            precision highp float;
-            precision highp sampler2D;
-            varying vec2 vUv;
-            uniform sampler2D uVelocity;
-            uniform sampler2D uSource;
-            uniform vec2 texelSize;
-            uniform float dt;
-            uniform float dissipation;
+            precision highp float; precision highp sampler2D;
+            varying vec2 vUv; uniform sampler2D uVelocity; uniform sampler2D uSource;
+            uniform vec2 texelSize; uniform float dt; uniform float dissipation;
             void main () {
                 vec2 coord = vUv - dt * texture2D(uVelocity, vUv).xy * texelSize;
                 gl_FragColor = dissipation * texture2D(uSource, coord);
@@ -937,13 +942,8 @@
         `);
 
         const divergenceShader = compileShader(gl.FRAGMENT_SHADER, `
-            precision mediump float;
-            precision mediump sampler2D;
-            varying highp vec2 vUv;
-            varying highp vec2 vL;
-            varying highp vec2 vR;
-            varying highp vec2 vT;
-            varying highp vec2 vB;
+            precision mediump float; precision mediump sampler2D;
+            varying highp vec2 vUv; varying highp vec2 vL; varying highp vec2 vR; varying highp vec2 vT; varying highp vec2 vB;
             uniform sampler2D uVelocity;
             void main () {
                 float L = texture2D(uVelocity, vL).x;
@@ -961,13 +961,8 @@
         `);
 
         const curlShader = compileShader(gl.FRAGMENT_SHADER, `
-            precision mediump float;
-            precision mediump sampler2D;
-            varying highp vec2 vUv;
-            varying highp vec2 vL;
-            varying highp vec2 vR;
-            varying highp vec2 vT;
-            varying highp vec2 vB;
+            precision mediump float; precision mediump sampler2D;
+            varying highp vec2 vUv; varying highp vec2 vL; varying highp vec2 vR; varying highp vec2 vT; varying highp vec2 vB;
             uniform sampler2D uVelocity;
             void main () {
                 float L = texture2D(uVelocity, vL).y;
@@ -980,17 +975,9 @@
         `);
 
         const vorticityShader = compileShader(gl.FRAGMENT_SHADER, `
-            precision highp float;
-            precision highp sampler2D;
-            varying vec2 vUv;
-            varying vec2 vL;
-            varying vec2 vR;
-            varying vec2 vT;
-            varying vec2 vB;
-            uniform sampler2D uVelocity;
-            uniform sampler2D uCurl;
-            uniform float curl;
-            uniform float dt;
+            precision highp float; precision highp sampler2D;
+            varying vec2 vUv; varying vec2 vL; varying vec2 vR; varying vec2 vT; varying vec2 vB;
+            uniform sampler2D uVelocity; uniform sampler2D uCurl; uniform float curl; uniform float dt;
             void main () {
                 float L = texture2D(uCurl, vL).x;
                 float R = texture2D(uCurl, vR).x;
@@ -1007,18 +994,10 @@
         `);
 
         const pressureShader = compileShader(gl.FRAGMENT_SHADER, `
-            precision mediump float;
-            precision mediump sampler2D;
-            varying highp vec2 vUv;
-            varying highp vec2 vL;
-            varying highp vec2 vR;
-            varying highp vec2 vT;
-            varying highp vec2 vB;
-            uniform sampler2D uPressure;
-            uniform sampler2D uDivergence;
-            vec2 boundary (vec2 uv) {
-                return uv;
-            }
+            precision mediump float; precision mediump sampler2D;
+            varying highp vec2 vUv; varying highp vec2 vL; varying highp vec2 vR; varying highp vec2 vT; varying highp vec2 vB;
+            uniform sampler2D uPressure; uniform sampler2D uDivergence;
+            vec2 boundary (vec2 uv) { return uv; }
             void main () {
                 float L = texture2D(uPressure, boundary(vL)).x;
                 float R = texture2D(uPressure, boundary(vR)).x;
@@ -1032,18 +1011,10 @@
         `);
 
         const gradientSubtractShader = compileShader(gl.FRAGMENT_SHADER, `
-            precision mediump float;
-            precision mediump sampler2D;
-            varying highp vec2 vUv;
-            varying highp vec2 vL;
-            varying highp vec2 vR;
-            varying highp vec2 vT;
-            varying highp vec2 vB;
-            uniform sampler2D uPressure;
-            uniform sampler2D uVelocity;
-            vec2 boundary (vec2 uv) {
-                return uv;
-            }
+            precision mediump float; precision mediump sampler2D;
+            varying highp vec2 vUv; varying highp vec2 vL; varying highp vec2 vR; varying highp vec2 vT; varying highp vec2 vB;
+            uniform sampler2D uPressure; uniform sampler2D uVelocity;
+            vec2 boundary (vec2 uv) { return uv; }
             void main () {
                 float L = texture2D(uPressure, boundary(vL)).x;
                 float R = texture2D(uPressure, boundary(vR)).x;
@@ -1062,24 +1033,14 @@
             gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array([0, 1, 2, 0, 2, 3]), gl.STATIC_DRAW);
             gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
             gl.enableVertexAttribArray(0);
-
             return (destination) => {
                 gl.bindFramebuffer(gl.FRAMEBUFFER, destination);
                 gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
             }
         })();
 
-        let simWidth;
-        let simHeight;
-        let dyeWidth;
-        let dyeHeight;
-        let density;
-        let velocity;
-        let divergence;
-        let curl;
-        let pressure;
-        let bloom;
-
+        let simWidth, simHeight, dyeWidth, dyeHeight;
+        let density, velocity, divergence, curl, pressure, bloom;
         let ditheringTexture = createNoiseTexture(256);
 
         const clearProgram = new GLProgram(baseVertexShader, clearShader);
@@ -1103,51 +1064,31 @@
         function initFramebuffers() {
             let simRes = getResolution(config.SIM_RESOLUTION);
             let dyeRes = getResolution(config.DYE_RESOLUTION);
-
-            simWidth = simRes.width;
-            simHeight = simRes.height;
-            dyeWidth = dyeRes.width;
-            dyeHeight = dyeRes.height;
-
+            simWidth = simRes.width; simHeight = simRes.height;
+            dyeWidth = dyeRes.width; dyeHeight = dyeRes.height;
             const texType = ext.halfFloatTexType;
-            const rgba = ext.formatRGBA;
-            const rg = ext.formatRG;
-            const r = ext.formatR;
+            const rgba = ext.formatRGBA; const rg = ext.formatRG; const r = ext.formatR;
             const filtering = ext.supportLinearFiltering ? gl.LINEAR : gl.NEAREST;
-
-            if (density == null)
-                density = createDoubleFBO(dyeWidth, dyeHeight, rgba.internalFormat, rgba.format, texType, filtering);
-            else
-                density = resizeDoubleFBO(density, dyeWidth, dyeHeight, rgba.internalFormat, rgba.format, texType, filtering);
-
-            if (velocity == null)
-                velocity = createDoubleFBO(simWidth, simHeight, rg.internalFormat, rg.format, texType, filtering);
-            else
-                velocity = resizeDoubleFBO(velocity, simWidth, simHeight, rg.internalFormat, rg.format, texType, filtering);
-
+            if (density == null) density = createDoubleFBO(dyeWidth, dyeHeight, rgba.internalFormat, rgba.format, texType, filtering);
+            else density = resizeDoubleFBO(density, dyeWidth, dyeHeight, rgba.internalFormat, rgba.format, texType, filtering);
+            if (velocity == null) velocity = createDoubleFBO(simWidth, simHeight, rg.internalFormat, rg.format, texType, filtering);
+            else velocity = resizeDoubleFBO(velocity, simWidth, simHeight, rg.internalFormat, rg.format, texType, filtering);
             divergence = createFBO(simWidth, simHeight, r.internalFormat, r.format, texType, gl.NEAREST);
             curl = createFBO(simWidth, simHeight, r.internalFormat, r.format, texType, gl.NEAREST);
             pressure = createDoubleFBO(simWidth, simHeight, r.internalFormat, r.format, texType, gl.NEAREST);
-
             initBloomFramebuffers();
         }
 
         function initBloomFramebuffers() {
             let res = getResolution(config.BLOOM_RESOLUTION);
-
-            const texType = ext.halfFloatTexType;
-            const rgba = ext.formatRGBA;
+            const texType = ext.halfFloatTexType; const rgba = ext.formatRGBA;
             const filtering = ext.supportLinearFiltering ? gl.LINEAR : gl.NEAREST;
-
             bloom = createFBO(res.width, res.height, rgba.internalFormat, rgba.format, texType, filtering);
-
             bloomFramebuffers.length = 0;
             for (let i = 0; i < config.BLOOM_ITERATIONS; i++) {
                 let width = res.width >> (i + 1);
                 let height = res.height >> (i + 1);
-
                 if (width < 2 || height < 2) break;
-
                 let fbo = createFBO(width, height, rgba.internalFormat, rgba.format, texType, filtering);
                 bloomFramebuffers.push(fbo);
             }
@@ -1162,41 +1103,23 @@
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
             gl.texImage2D(gl.TEXTURE_2D, 0, internalFormat, w, h, 0, format, type, null);
-
             let fbo = gl.createFramebuffer();
             gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
             gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
             gl.viewport(0, 0, w, h);
             gl.clear(gl.COLOR_BUFFER_BIT);
-
-            return {
-                texture,
-                fbo,
-                width: w,
-                height: h,
-                attach(id) {
-                    gl.activeTexture(gl.TEXTURE0 + id);
-                    gl.bindTexture(gl.TEXTURE_2D, texture);
-                    return id;
-                }
-            };
+            return { texture, fbo, width: w, height: h,
+                attach(id) { gl.activeTexture(gl.TEXTURE0 + id); gl.bindTexture(gl.TEXTURE_2D, texture); return id; } };
         }
 
         function createDoubleFBO(w, h, internalFormat, format, type, param) {
             let fbo1 = createFBO(w, h, internalFormat, format, type, param);
             let fbo2 = createFBO(w, h, internalFormat, format, type, param);
-
             return {
-                get read() { return fbo1; },
-                set read(value) { fbo1 = value; },
-                get write() { return fbo2; },
-                set write(value) { fbo2 = value; },
-                swap() {
-                    let temp = fbo1;
-                    fbo1 = fbo2;
-                    fbo2 = temp;
-                }
-            }
+                get read() { return fbo1; }, set read(v) { fbo1 = v; },
+                get write() { return fbo2; }, set write(v) { fbo2 = v; },
+                swap() { let t = fbo1; fbo1 = fbo2; fbo2 = t; }
+            };
         }
 
         function resizeFBO(target, w, h, internalFormat, format, type, param) {
@@ -1216,8 +1139,7 @@
 
         function createNoiseTexture(size) {
             const data = new Uint8Array(size * size * 3);
-            for (let i = 0; i < data.length; i++)
-                data[i] = Math.floor(Math.random() * 256);
+            for (let i = 0; i < data.length; i++) data[i] = Math.floor(Math.random() * 256);
             let texture = gl.createTexture();
             gl.bindTexture(gl.TEXTURE_2D, texture);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
@@ -1225,22 +1147,13 @@
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, size, size, 0, gl.RGB, gl.UNSIGNED_BYTE, data);
-            return {
-                texture,
-                width: size,
-                height: size,
-                attach(id) {
-                    gl.activeTexture(gl.TEXTURE0 + id);
-                    gl.bindTexture(gl.TEXTURE_2D, texture);
-                    return id;
-                }
-            };
+            return { texture, width: size, height: size,
+                attach(id) { gl.activeTexture(gl.TEXTURE0 + id); gl.bindTexture(gl.TEXTURE_2D, texture); return id; } };
         }
 
         initFramebuffers();
         multipleSplats(34);
-        for (let i = 0; i < 8; i++)
-            splatStack.push(10 + parseInt(Math.random() * 10));
+        for (let i = 0; i < 8; i++) splatStack.push(10 + parseInt(Math.random() * 10));
 
         let lastColorChangeTime = Date.now();
         let virtualSeeded = false;
@@ -1263,63 +1176,41 @@
             resizeCanvas();
             driveVirtualPointer();
             input();
-            if (!config.PAUSED)
-                step(0.016);
+            if (!config.PAUSED) step(0.016);
             render(null);
             rafHandle = requestAnimationFrame(update);
         }
 
         function driveVirtualPointer() {
-            if (Date.now() - engineStart < ORBIT_START_DELAY)
-                return;
-            const cx = canvas.width / 2;
-            const cy = canvas.height / 2;
+            if (Date.now() - engineStart < ORBIT_START_DELAY) return;
+            const cx = canvas.width / 2; const cy = canvas.height / 2;
             const base = Math.min(ORBIT_RADIUS, canvas.width * 0.35, canvas.height * 0.35);
             const r = base * (0.72 + 0.28 * Math.sin(orbitAngle * 0.37));
             orbitAngle += ORBIT_SPEED;
             const x = cx + Math.cos(orbitAngle) * r;
             const y = cy + Math.sin(orbitAngle) * r;
-            if (!virtualSeeded) {
-                virtualSeeded = true;
-                vPrevX = x;
-                vPrevY = y;
-                return;
-            }
+            if (!virtualSeeded) { virtualSeeded = true; vPrevX = x; vPrevY = y; return; }
             if (!virtualColor || Date.now() - lastVColorTime > 120) {
                 virtualColor = generateColor();
-                virtualColor.r *= 3.2;
-                virtualColor.g *= 3.2;
-                virtualColor.b *= 3.2;
+                virtualColor.r *= 3.2; virtualColor.g *= 3.2; virtualColor.b *= 3.2;
                 lastVColorTime = Date.now();
             }
             const dx = (x - vPrevX) * 9.0;
             const dy = (y - vPrevY) * 9.0;
-            vPrevX = x;
-            vPrevY = y;
+            vPrevX = x; vPrevY = y;
             splat(x, y, dx, dy, virtualColor);
         }
 
         function input() {
-            if (splatStack.length > 0)
-                multipleSplats(splatStack.pop());
-
+            if (splatStack.length > 0) multipleSplats(splatStack.pop());
             for (let i = 0; i < pointers.length; i++) {
                 const p = pointers[i];
-                if (p.moved) {
-                    splat(p.x, p.y, p.dx, p.dy, p.color);
-                    p.moved = false;
-                }
+                if (p.moved) { splat(p.x, p.y, p.dx, p.dy, p.color); p.moved = false; }
             }
-
-            if (!config.COLORFUL)
-                return;
-
+            if (!config.COLORFUL) return;
             if (lastColorChangeTime + 100 < Date.now()) {
                 lastColorChangeTime = Date.now();
-                for (let i = 0; i < pointers.length; i++) {
-                    const p = pointers[i];
-                    p.color = generateColor();
-                }
+                for (let i = 0; i < pointers.length; i++) pointers[i].color = generateColor();
             }
         }
 
@@ -1381,7 +1272,6 @@
             velocity.swap();
 
             gl.viewport(0, 0, dyeWidth, dyeHeight);
-
             if (!ext.supportLinearFiltering)
                 gl.uniform2f(advectionProgram.uniforms.dyeTexelSize, 1.0 / dyeWidth, 1.0 / dyeHeight);
             gl.uniform1i(advectionProgram.uniforms.uVelocity, velocity.read.attach(0));
@@ -1392,20 +1282,14 @@
         }
 
         function render(target) {
-            if (config.BLOOM)
-                applyBloom(density.read, bloom);
-
+            if (config.BLOOM) applyBloom(density.read, bloom);
             if (target == null || !config.TRANSPARENT) {
                 gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
                 gl.enable(gl.BLEND);
-            }
-            else {
-                gl.disable(gl.BLEND);
-            }
+            } else gl.disable(gl.BLEND);
 
             let width = target == null ? gl.drawingBufferWidth : dyeWidth;
             let height = target == null ? gl.drawingBufferHeight : dyeHeight;
-
             gl.viewport(0, 0, width, height);
 
             if (!config.TRANSPARENT) {
@@ -1432,8 +1316,7 @@
                     let scale = getTextureScale(ditheringTexture, width, height);
                     gl.uniform2f(program.uniforms.ditherScale, scale.x, scale.y);
                 }
-            }
-            else {
+            } else {
                 let program = config.BLOOM ? displayBloomProgram : displayProgram;
                 program.bind();
                 gl.uniform1i(program.uniforms.uTexture, density.read.attach(0));
@@ -1444,16 +1327,12 @@
                     gl.uniform2f(program.uniforms.ditherScale, scale.x, scale.y);
                 }
             }
-
             blit(target);
         }
 
         function applyBloom(source, destination) {
-            if (bloomFramebuffers.length < 2)
-                return;
-
+            if (bloomFramebuffers.length < 2) return;
             let last = destination;
-
             gl.disable(gl.BLEND);
             bloomPrefilterProgram.bind();
             let knee = config.BLOOM_THRESHOLD * config.BLOOM_SOFT_KNEE + 0.0001;
@@ -1518,9 +1397,7 @@
         function multipleSplats(amount) {
             for (let i = 0; i < amount; i++) {
                 const color = generateColor();
-                color.r *= 10.0;
-                color.g *= 10.0;
-                color.b *= 10.0;
+                color.r *= 10.0; color.g *= 10.0; color.b *= 10.0;
                 const x = canvas.width * Math.random();
                 const y = canvas.height * Math.random();
                 const dx = 1000 * (Math.random() - 0.5);
@@ -1551,57 +1428,40 @@
         on(window, 'mousemove', e => {
             const { x, y } = pointerPos(e.clientX, e.clientY);
             const p = pointers[0];
-            if (!p.everMoved) {
-                p.everMoved = true;
-                p.x = x;
-                p.y = y;
-                p.down = true;
-                return;
-            }
-            p.down = true;
-            p.moved = true;
-            p.dx = (x - p.x) * 5.0;
-            p.dy = (y - p.y) * 5.0;
-            p.x = x;
-            p.y = y;
+            if (!p.everMoved) { p.everMoved = true; p.x = x; p.y = y; p.down = true; return; }
+            p.down = true; p.moved = true;
+            p.dx = (x - p.x) * 5.0; p.dy = (y - p.y) * 5.0;
+            p.x = x; p.y = y;
             p.color = generateColor();
         });
 
         on(window, 'touchmove', e => {
             const touches = e.targetTouches;
             for (let i = 0; i < touches.length; i++) {
-                if (i >= pointers.length)
-                    pointers.push(new pointerPrototype());
+                if (i >= pointers.length) pointers.push(new pointerPrototype());
                 const p = pointers[i];
                 const { x, y } = pointerPos(touches[i].clientX, touches[i].clientY);
                 p.down = true;
                 p.moved = p.everMoved === true;
                 p.everMoved = true;
-                p.dx = (x - p.x) * 8.0;
-                p.dy = (y - p.y) * 8.0;
-                p.x = x;
-                p.y = y;
+                p.dx = (x - p.x) * 8.0; p.dy = (y - p.y) * 8.0;
+                p.x = x; p.y = y;
             }
         }, { passive: true });
 
         on(window, 'touchstart', e => {
             const touches = e.targetTouches;
             for (let i = 0; i < touches.length; i++) {
-                if (i >= pointers.length)
-                    pointers.push(new pointerPrototype());
+                if (i >= pointers.length) pointers.push(new pointerPrototype());
                 const p = pointers[i];
                 const { x, y } = pointerPos(touches[i].clientX, touches[i].clientY);
                 p.id = touches[i].identifier;
-                p.down = true;
-                p.x = x;
-                p.y = y;
+                p.down = true; p.x = x; p.y = y;
                 p.color = generateColor();
             }
         }, { passive: true });
 
-        on(window, 'mouseup', () => {
-            pointers[0].down = false;
-        });
+        on(window, 'mouseup', () => { pointers[0].down = false; });
 
         on(window, 'touchend', e => {
             const touches = e.changedTouches;
@@ -1620,9 +1480,7 @@
         function generateColor() {
             const h = 0.5 + Math.random() * 0.42;
             let c = HSVtoRGB(h, 0.95, 1.0);
-            c.r *= 0.92;
-            c.g *= 0.92;
-            c.b *= 0.92;
+            c.r *= 0.92; c.g *= 0.92; c.b *= 0.92;
             return c;
         }
 
@@ -1633,7 +1491,6 @@
             p = v * (1 - s);
             q = v * (1 - f * s);
             t = v * (1 - (1 - f) * s);
-
             switch (i % 6) {
                 case 0: r = v, g = t, b = p; break;
                 case 1: r = q, g = v, b = p; break;
@@ -1647,16 +1504,11 @@
 
         function getResolution(resolution) {
             let aspectRatio = gl.drawingBufferWidth / gl.drawingBufferHeight;
-            if (aspectRatio < 1)
-                aspectRatio = 1.0 / aspectRatio;
-
+            if (aspectRatio < 1) aspectRatio = 1.0 / aspectRatio;
             let max = Math.round(resolution * aspectRatio);
             let min = Math.round(resolution);
-
-            if (gl.drawingBufferWidth > gl.drawingBufferHeight)
-                return { width: max, height: min };
-            else
-                return { width: min, height: max };
+            if (gl.drawingBufferWidth > gl.drawingBufferHeight) return { width: max, height: min };
+            else return { width: min, height: max };
         }
 
         function getTextureScale(texture, width, height) {
@@ -1665,110 +1517,248 @@
     }
   </script>
 
-  <!-- Initialize fluid + reveal animations -->
+  <!-- Init + reveal + FULLPAGE scroll logic -->
   <script>
     (function() {
-      // Start fluid simulation
       const canvas = document.getElementById('fluid-canvas');
       if (canvas) fluidSimulation(canvas);
 
-      // ----- REVEAL ANIMATIONS -----
-      const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
-
-      // Generic block reveal (nav, badge, form, footer)
-      function revealBlock(el, delayMs, fromTransform) {
+      // ---------- REVEAL hero ----------
+      function revealBlock(el, delayMs) {
         if (!el) return;
-        // Set initial state via inline style (already set in markup for translateY, but ensure opacity 0)
         el.style.opacity = '0';
-        // The fromTransform is already applied inline in markup; we keep it.
         setTimeout(() => {
-          // Animate using CSS transition (for performance)
-          el.style.transition = `opacity 700ms cubic-bezier(0.2, 0, 0, 1), transform 700ms cubic-bezier(0.2, 0, 0, 1)`;
+          el.style.transition = 'opacity 700ms cubic-bezier(0.2, 0, 0, 1), transform 700ms cubic-bezier(0.2, 0, 0, 1)';
           el.style.opacity = '1';
           el.style.transform = 'translateY(0)';
-          // Clean up transition after done to avoid conflicts
-          setTimeout(() => {
-            el.style.transition = '';
-          }, 750);
+          setTimeout(() => { el.style.transition = ''; }, 750);
         }, delayMs);
       }
+      revealBlock(document.getElementById('main-header'), 150);
+      revealBlock(document.getElementById('badge-pill'), 320);
 
-      // Word-by-word reveal: each word span gets its own transition delay
-      function revealWords(words, baseDelayMs, staggerMs, durationMs, initialOffsetY) {
-        words.forEach((span, i) => {
-          // Apply initial offset (already set via CSS? We set inline to be safe)
-          span.style.transform = `translateY(${initialOffsetY}px)`;
-          span.style.opacity = '0';
-          const delay = baseDelayMs + i * staggerMs;
-          setTimeout(() => {
-            span.style.transition = `opacity ${durationMs}ms cubic-bezier(0.2, 0, 0, 1), transform ${durationMs}ms cubic-bezier(0.2, 0, 0, 1)`;
-            span.style.opacity = '1';
-            span.style.transform = 'translateY(0)';
-          }, delay);
-        });
-      }
-
-      // Wait for DOM ready (script is at end of body, so already ready)
-      const header = document.getElementById('main-header');
-      const badge = document.getElementById('badge-pill');
       const headingWords = document.querySelectorAll('#main-heading .word-span');
-      const sublineWords = document.querySelectorAll('#subline .word-span');
-      const formWrap = document.getElementById('waitlist-form-wrap');
-      const footer = document.getElementById('main-footer');
-
-      // Header (nav)
-      revealBlock(header, 150, 'translateY(-0.75rem)');
-
-      // Badge
-      revealBlock(badge, 320, 'translateY(1.25rem)');
-
-      // Heading words (delay 480ms, stagger 85ms, duration 720ms, from y=26px)
       if (headingWords.length) {
-        // Ensure each word has initial state (already via CSS .word-span, but set inline for transition)
-        headingWords.forEach((span, i) => {
-          span.style.transform = 'translateY(26px)';
-          span.style.opacity = '0';
-        });
-        // Trigger after delay
+        headingWords.forEach(s => { s.style.transform = 'translateY(26px)'; s.style.opacity = '0'; });
         setTimeout(() => {
-          headingWords.forEach((span, i) => {
-            const staggerDelay = i * 85;
-            span.style.transition = `opacity 720ms cubic-bezier(0.2, 0, 0, 1), transform 720ms cubic-bezier(0.2, 0, 0, 1)`;
-            span.style.transitionDelay = `${staggerDelay}ms`;
-            span.style.opacity = '1';
-            span.style.transform = 'translateY(0)';
+          headingWords.forEach((s, i) => {
+            s.style.transition = 'opacity 720ms cubic-bezier(0.2, 0, 0, 1), transform 720ms cubic-bezier(0.2, 0, 0, 1)';
+            s.style.transitionDelay = `${i * 85}ms`;
+            s.style.opacity = '1';
+            s.style.transform = 'translateY(0)';
           });
         }, 480);
       }
 
-      // Subline words (delay 1150ms, stagger 22ms, duration 600ms, from y=14px)
+      const sublineWords = document.querySelectorAll('#subline .word-span');
       if (sublineWords.length) {
-        sublineWords.forEach((span) => {
-          span.style.transform = 'translateY(14px)';
-          span.style.opacity = '0';
-        });
+        sublineWords.forEach(s => { s.style.transform = 'translateY(14px)'; s.style.opacity = '0'; });
         setTimeout(() => {
-          sublineWords.forEach((span, i) => {
-            const staggerDelay = i * 22;
-            span.style.transition = `opacity 600ms cubic-bezier(0.2, 0, 0, 1), transform 600ms cubic-bezier(0.2, 0, 0, 1)`;
-            span.style.transitionDelay = `${staggerDelay}ms`;
-            span.style.opacity = '1';
-            span.style.transform = 'translateY(0)';
+          sublineWords.forEach((s, i) => {
+            s.style.transition = 'opacity 600ms cubic-bezier(0.2, 0, 0, 1), transform 600ms cubic-bezier(0.2, 0, 0, 1)';
+            s.style.transitionDelay = `${i * 22}ms`;
+            s.style.opacity = '1';
+            s.style.transform = 'translateY(0)';
           });
         }, 1150);
       }
 
-      // Form
-      revealBlock(formWrap, 1450, 'translateY(1.25rem)');
+      revealBlock(document.getElementById('waitlist-form-wrap'), 1450);
+      revealBlock(document.getElementById('main-footer'), 1650);
 
-      // Footer
-      revealBlock(footer, 1650, 'translateY(1.25rem)');
-
-      // Prevent actual form submit
       const form = document.querySelector('form');
-      if (form) {
-        form.addEventListener('submit', e => e.preventDefault());
+      if (form) form.addEventListener('submit', e => e.preventDefault());
+
+      // ---------- REVEAL recursos ----------
+      const recursosTitle = document.getElementById('recursos-title');
+      const recursosSub = document.querySelector('.recursos-sub');
+      const recursoCards = document.querySelectorAll('.recurso-card');
+
+      if (recursosTitle) {
+        recursosTitle.style.opacity = '0';
+        recursosTitle.style.transform = 'translateY(1.5rem)';
+        recursosTitle.style.transition = 'opacity 700ms cubic-bezier(0.2,0,0,1), transform 700ms cubic-bezier(0.2,0,0,1)';
       }
+      if (recursosSub) {
+        recursosSub.style.opacity = '0';
+        recursosSub.style.transform = 'translateY(1rem)';
+        recursosSub.style.transition = 'opacity 700ms cubic-bezier(0.2,0,0,1), transform 700ms cubic-bezier(0.2,0,0,1)';
+      }
+      recursoCards.forEach((card, i) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(1.5rem)';
+        card.style.transition = 'opacity 700ms cubic-bezier(0.2,0,0,1), transform 700ms cubic-bezier(0.2,0,0,1)';
+        card.style.transitionDelay = `${i * 120}ms`;
+      });
+
+      let recursosRevealed = false;
+      function revealRecursos() {
+        if (recursosRevealed) return;
+        recursosRevealed = true;
+        if (recursosTitle) { recursosTitle.style.opacity = '1'; recursosTitle.style.transform = 'translateY(0)'; }
+        if (recursosSub) setTimeout(() => { recursosSub.style.opacity = '1'; recursosSub.style.transform = 'translateY(0)'; }, 150);
+        recursoCards.forEach((card, i) => {
+          setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, 300 + i * 120);
+        });
+      }
+
+      // ---------- PISTA DE SCROLL ----------
+      const scrollHint = document.querySelector('.scroll-hint');
+
+      // ============================================================
+      // FULLPAGE LOGIC
+      // ============================================================
+      const track = document.getElementById('fullpage-track');
+      const sections = Array.from(document.querySelectorAll('.fp-section'));
+      const totalSections = sections.length;
+      let currentIndex = 0;
+      let isAnimating = false;
+      const ANIM_DURATION = 1000; // debe coincidir con el transition del CSS
+      const WHEEL_THRESHOLD = 20;
+      const TOUCH_THRESHOLD = 40;
+
+      // Actualiza los dots
+      const dots = Array.from(document.querySelectorAll('.fp-dot'));
+      function updateDots() {
+        dots.forEach((d, i) => d.classList.toggle('active', i === currentIndex));
+      }
+
+      // Aplica el transform al track
+      function applyTransform(index) {
+        const offset = -index * 100; // en lvh
+        track.style.transform = `translate3d(0, ${offset}lvh, 0)`;
+      }
+
+      // Va a una sección concreta
+      function goToSection(index) {
+        if (isAnimating) return;
+        if (index < 0 || index >= totalSections) return;
+        if (index === currentIndex) return;
+
+        isAnimating = true;
+        currentIndex = index;
+        applyTransform(currentIndex);
+        updateDots();
+
+        // Revelar recursos al entrar en la sección 2
+        if (currentIndex === 1) revealRecursos();
+
+        // Ocultar pista de scroll al salir de la sección 0
+        if (scrollHint) {
+          scrollHint.style.opacity = currentIndex === 0 ? '0.85' : '0';
+        }
+
+        // Desbloquear al terminar la animación
+        setTimeout(() => { isAnimating = false; }, ANIM_DURATION);
+      }
+
+      // Aplicamos el transform inicial
+      applyTransform(0);
+
+      // ---------- Wheel ----------
+      let wheelAccum = 0;
+      let wheelResetTimer = null;
+
+      function onWheel(e) {
+        // Ignoramos durante la animación, y bloqueamos el scroll nativo por completo
+        if (isAnimating) {
+          e.preventDefault();
+          return;
+        }
+
+        // Bloqueamos siempre el scroll nativo del documento
+        e.preventDefault();
+
+        wheelAccum += e.deltaY;
+        clearTimeout(wheelResetTimer);
+        wheelResetTimer = setTimeout(() => { wheelAccum = 0; }, 150);
+
+        if (Math.abs(wheelAccum) < WHEEL_THRESHOLD) return;
+
+        const direction = Math.sign(wheelAccum);
+        wheelAccum = 0;
+
+        if (direction > 0 && currentIndex < totalSections - 1) {
+          goToSection(currentIndex + 1);
+        } else if (direction < 0 && currentIndex > 0) {
+          goToSection(currentIndex - 1);
+        }
+      }
+
+      // ---------- Touch ----------
+      let touchStartY = 0;
+      let touchActive = false;
+
+      function onTouchStart(e) {
+        if (e.touches.length !== 1) return;
+        if (isAnimating) return;
+        touchStartY = e.touches[0].clientY;
+        touchActive = true;
+      }
+
+      function onTouchMove(e) {
+        if (!touchActive) return;
+        if (isAnimating) {
+          e.preventDefault();
+          return;
+        }
+        const dy = touchStartY - e.touches[0].clientY;
+        if (Math.abs(dy) < TOUCH_THRESHOLD) return;
+
+        e.preventDefault();
+        const direction = Math.sign(dy);
+        touchActive = false;
+
+        if (direction > 0 && currentIndex < totalSections - 1) {
+          goToSection(currentIndex + 1);
+        } else if (direction < 0 && currentIndex > 0) {
+          goToSection(currentIndex - 1);
+        }
+      }
+
+      function onTouchEnd() { touchActive = false; }
+
+      // ---------- Keyboard ----------
+      function onKeyDown(e) {
+        if (isAnimating) return;
+        if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
+          e.preventDefault();
+          if (currentIndex < totalSections - 1) goToSection(currentIndex + 1);
+        } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+          e.preventDefault();
+          if (currentIndex > 0) goToSection(currentIndex - 1);
+        } else if (e.key === 'Home') {
+          e.preventDefault();
+          goToSection(0);
+        } else if (e.key === 'End') {
+          e.preventDefault();
+          goToSection(totalSections - 1);
+        }
+      }
+
+      // ---------- Dots click ----------
+      dots.forEach(dot => {
+        dot.addEventListener('click', () => {
+          const idx = parseInt(dot.dataset.index, 10);
+          goToSection(idx);
+        });
+      });
+
+      // ---------- Listeners ----------
+      window.addEventListener('wheel', onWheel, { passive: false });
+      window.addEventListener('touchstart', onTouchStart, { passive: true });
+      window.addEventListener('touchmove', onTouchMove, { passive: false });
+      window.addEventListener('touchend', onTouchEnd, { passive: true });
+      window.addEventListener('keydown', onKeyDown);
+
+      // Bloqueo extra de scroll nativo por si acaso
+      document.addEventListener('scroll', (e) => {
+        // No debería ocurrir, pero forzamos scroll a 0
+        if (window.scrollY !== 0 || window.scrollX !== 0) {
+          window.scrollTo(0, 0);
+        }
+      }, { passive: true });
+
     })();
   </script>
 </body>
