@@ -323,6 +323,7 @@
         transparent 75%);
     }
 
+    /* Contenedor scrollable de la sección 2 */
     .recursos-scroll {
       position: relative;
       z-index: 1;
@@ -432,7 +433,7 @@
     }
 
     /* ============================================================
-       LISTA DE HERRAMIENTAS IA (por categoría)
+       LISTA DE HERRAMIENTAS IA
        ============================================================ */
     .tools-heading {
       margin-top: 3.5rem;
@@ -453,42 +454,10 @@
       text-align: center;
     }
 
-    /* Categorías */
-    .tool-category {
-      width: 100%;
-      margin-top: 2.5rem;
-    }
-    .tool-category:first-of-type {
-      margin-top: 2rem;
-    }
-
-    .tool-category-title {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-size: 1.1rem;
-      font-weight: 500;
-      letter-spacing: -0.01em;
-      color: var(--heading);
-      text-align: left;
-      margin-bottom: 0.9rem;
-      padding-bottom: 0.6rem;
-      border-bottom: 1px solid var(--glass-border);
-    }
-    @media (min-width: 640px) { .tool-category-title { font-size: 1.2rem; } }
-    .tool-category-title::before {
-      content: "";
-      width: 0.35rem;
-      height: 1rem;
-      border-radius: 999px;
-      background: linear-gradient(180deg, #9db4ff, #b98aff);
-      flex-shrink: 0;
-    }
-
     .tools-list {
       list-style: none;
       padding: 0;
-      margin: 0;
+      margin: 2rem 0 0;
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
@@ -610,7 +579,7 @@
               <path d="M2.5 9c2.5 0 2.5 4.2 5 4.2S10 9 12 9s2.5 4.2 5 4.2S19.5 9 21.5 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
               <path d="M2.5 15c2.5 0 2.5 4.2 5 4.2S10 15 12 15s2.5 4.2 5 4.2S19.5 15 21.5 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity="0.5"/>
             </svg>
-            Recursos en la WEB
+            Flowstate
           </a>
 
           <div class="nav-pill">
@@ -629,12 +598,12 @@
           </p>
 
           <h1 id="main-heading" aria-label="Deep Work in a Distracted World">
-            <span class="word-span">Trabajo</span>
-            <span class="word-span">Profundo</span>
-            <span class="word-span">en</span>
-            <span class="word-span">un</span>
-            <span class="word-span">Mundo</span>
-            <span class="word-span">Complejo</span>
+            <span class="word-span">Deep</span>
+            <span class="word-span">Work</span>
+            <span class="word-span">in</span>
+            <span class="word-span">a</span>
+            <span class="word-span">Distracted</span>
+            <span class="word-span">World</span>
           </h1>
 
           <p id="subline" class="subline" aria-label="Cut through the noise, reclaim your attention, and do work that truly matters.">
@@ -663,7 +632,7 @@
           </div>
         </div>
 
-        <footer id="main-footer" class="reveal" style="transform: translateY(1.20rem);">
+        <footer id="main-footer" class="reveal" style="transform: translateY(1.25rem);">
           © 2026 Flowstate — engineered for deep work.
         </footer>
 
@@ -680,117 +649,88 @@
         <div class="recursos-scroll" id="recursos-scroll">
           <div class="recursos-inner">
             <h2 class="recursos-title" id="recursos-title">Recursos</h2>
-          
+            <p class="recursos-sub">
+              Herramientas, guías y material seleccionado para ayudarte a entrar en flow y mantener tu atención enfocada.
+            </p>
 
-            <!-- ============================================================
-                 LISTA DE HERRAMIENTAS IA (POR ESPECIALIDAD + ALFABÉTICO)
-                 ============================================================ -->
-            <h3 class="tools-heading">Herramientas de IA gratuitas</h3>
+            <div class="recursos-grid">
+              <a href="#" class="recurso-card">
+                <span class="tag">Guía</span>
+                <h3>El arte del deep work</h3>
+                <p>Principios prácticos para sesiones de concentración profunda de 90 minutos.</p>
+              </a>
+              <a href="#" class="recurso-card">
+                <span class="tag">Herramienta</span>
+                <h3>Focus timer</h3>
+                <p>Un temporizador minimalista diseñado para no romper tu estado de flow.</p>
+              </a>
+              <a href="#" class="recurso-card">
+                <span class="tag">Lectura</span>
+                <h3>Diseñando tu entorno</h3>
+                <p>Cómo reducir la fricción y las distracciones digitales en tu espacio de trabajo.</p>
+              </a>
+            </div>
+
+            <!-- ================= LISTA DE HERRAMIENTAS IA (ORDEN ALFABÉTICO) ================= -->
+            <h3 class="tools-heading">Herramientas de IA gratuitas recomendadas</h3>
             <p class="tools-sub">
               Una selección de asistentes, generadores y utilidades con IA que puedes usar sin pagar.
             </p>
 
-            <!-- ASISTENTES Y PRODUCTIVIDAD -->
-            <div class="tool-category">
-              <h4 class="tool-category-title">Asistentes y productividad</h4>
-              <ul class="tools-list">
-                <li>
-                  <strong>ChatGPT</strong> — Asistente de IA general de OpenAI. Ideal para redactar textos, resumir documentos, analizar archivos y generar imágenes simples. La versión gratuita tiene límites de uso y acceso a GPT-5.5.<br>
-                  <a href="https://chat.openai.com" target="_blank" rel="noopener">https://chat.openai.com</a>
-                </li>
-                <li>
-                  <strong>Claude</strong> — De Anthropic, especializado en textos largos y contexto extenso (hasta 200K tokens). Excelente para edición, análisis documental y escritura natural. Plan gratuito con límite de mensajes renovable cada 5 horas.<br>
-                  <a href="https://claude.ai" target="_blank" rel="noopener">https://claude.ai</a>
-                </li>
-                <li>
-                  <strong>DeepSeek</strong> — Asistente de IA conversacional y de razonamiento de DeepSeek. Destaca en programación, matemáticas y análisis de textos largos, con un modelo gratuito muy competitivo y sin límites estrictos de mensajes.<br>
-                  <a href="https://chat.deepseek.com" target="_blank" rel="noopener">https://chat.deepseek.com</a>
-                </li>
-                <li>
-                  <strong>Google Gemini</strong> — Asistente de Google integrado con Gmail, Drive y YouTube. Destaca en investigación, resumen de documentos largos y generación de imágenes (Nano Banana). Plan gratuito con límites diarios.<br>
-                  <a href="https://gemini.google.com" target="_blank" rel="noopener">https://gemini.google.com</a>
-                </li>
-                <li>
-                  <strong>NotebookLM</strong> — Herramienta de Google que trabaja exclusivamente con los documentos que tú subes (PDFs, webs, videos). Genera resúmenes, mapas mentales y responde preguntas citando las fuentes. Gratis con hasta 100 cuadernos y 50 fuentes por cuaderno.<br>
-                  <a href="https://notebooklm.google.com" target="_blank" rel="noopener">https://notebooklm.google.com</a>
-                </li>
-              </ul>
-            </div>
-
-            <!-- BÚSQUEDA E INVESTIGACIÓN -->
-            <div class="tool-category">
-              <h4 class="tool-category-title">Búsqueda e investigación</h4>
-              <ul class="tools-list">
-                <li>
-                  <strong>Perplexity</strong> — Motor de búsqueda con IA que ofrece respuestas con citas y enlaces a fuentes. Ideal para investigación rápida y verificable. Tiene nivel gratuito con búsquedas ilimitadas y funciones avanzadas limitadas.<br>
-                  <a href="https://www.perplexity.ai" target="_blank" rel="noopener">https://www.perplexity.ai</a>
-                </li>
-              </ul>
-            </div>
-
-            <!-- PROGRAMACIÓN -->
-            <div class="tool-category">
-              <h4 class="tool-category-title">Programación</h4>
-              <ul class="tools-list">
-                <li>
-                  <strong>Cursor</strong> — Editor de código con IA (fork de VS Code). Incluye autocompletado contextual, edición por chat y modo agente para refactorizar múltiples archivos. Plan Hobby gratuito con solicitudes limitadas.<br>
-                  <a href="https://cursor.com" target="_blank" rel="noopener">https://cursor.com</a>
-                </li>
-                <li>
-                  <strong>GitHub Copilot</strong> — Asistente de programación integrado en VS Code y otros editores. Ofrece autocompletado y chat con IA. Plan gratuito: 2,000 completados y 50 solicitudes premium al mes.<br>
-                  <a href="https://github.com/features/copilot" target="_blank" rel="noopener">https://github.com/features/copilot</a>
-                </li>
-              </ul>
-            </div>
-
-            <!-- IMÁGENES Y ARTE -->
-            <div class="tool-category">
-              <h4 class="tool-category-title">Imágenes y arte</h4>
-              <ul class="tools-list">
-                <li>
-                  <strong>Adobe Firefly</strong> — Generador de imágenes entrenado con contenido con licencia, por lo que sus resultados son seguros para uso comercial incluso en el plan gratuito (aproximadamente 25 créditos al mes).<br>
-                  <a href="https://firefly.adobe.com" target="_blank" rel="noopener">https://firefly.adobe.com</a>
-                </li>
-                <li>
-                  <strong>Leonardo.Ai</strong> — Generador de imágenes con control artístico avanzado (Image Guidance, modelos personalizados). Plan gratuito: 150 tokens rápidos al día, con uso comercial permitido.<br>
-                  <a href="https://leonardo.ai" target="_blank" rel="noopener">https://leonardo.ai</a>
-                </li>
-              </ul>
-            </div>
-
-            <!-- MÚSICA -->
-            <div class="tool-category">
-              <h4 class="tool-category-title">Música</h4>
-              <ul class="tools-list">
-                <li>
-                  <strong>Suno</strong> — Generador de canciones completas con voces e instrumentales a partir de texto. Plan gratuito: 50 créditos diarios (aproximadamente 10 canciones), aunque los resultados no son para uso comercial.<br>
-                  <a href="https://suno.com" target="_blank" rel="noopener">https://suno.com</a>
-                </li>
-              </ul>
-            </div>
-
-            <!-- AUDIO Y VOZ -->
-            <div class="tool-category">
-              <h4 class="tool-category-title">Audio y voz</h4>
-              <ul class="tools-list">
-                <li>
-                  <strong>ElevenLabs</strong> — Síntesis de voz de alta calidad y clonación de voz. Plan gratuito: 10,000 caracteres al mes y 3 clones de voz, solo para uso no comercial.<br>
-                  <a href="https://elevenlabs.io" target="_blank" rel="noopener">https://elevenlabs.io</a>
-                </li>
-              </ul>
-            </div>
-
-            <!-- 3D Y MODELADO -->
-            <div class="tool-category">
-              <h4 class="tool-category-title">3D y modelado</h4>
-              <ul class="tools-list">
-                <li>
-                  <strong>Meshy</strong> — Generación de modelos 3D a partir de texto o imagen, con texturas y plugins para Blender/Unity/Unreal. Plan gratuito: 200 créditos al mes (aproximadamente 20 modelos), solo para uso no comercial.<br>
-                  <a href="https://www.meshy.ai" target="_blank" rel="noopener">https://www.meshy.ai</a>
-                </li>
-              </ul>
-            </div>
-
+            <ul class="tools-list">
+              <li>
+                <strong>Adobe Firefly</strong> — Generador de imágenes entrenado con contenido con licencia, por lo que sus resultados son seguros para uso comercial incluso en el plan gratuito (aproximadamente 25 créditos al mes).<br>
+                <a href="https://firefly.adobe.com" target="_blank" rel="noopener">https://firefly.adobe.com</a>
+              </li>
+              <li>
+                <strong>ChatGPT</strong> — Asistente de IA general de OpenAI. Ideal para redactar textos, resumir documentos, analizar archivos y generar imágenes simples. La versión gratuita tiene límites de uso y acceso a GPT-5.5.<br>
+                <a href="https://chat.openai.com" target="_blank" rel="noopener">https://chat.openai.com</a>
+              </li>
+              <li>
+                <strong>Claude</strong> — De Anthropic, especializado en textos largos y contexto extenso (hasta 200K tokens). Excelente para edición, análisis documental y escritura natural. Plan gratuito con límite de mensajes renovable cada 5 horas.<br>
+                <a href="https://claude.ai" target="_blank" rel="noopener">https://claude.ai</a>
+              </li>
+              <li>
+                <strong>Cursor</strong> — Editor de código con IA (fork de VS Code). Incluye autocompletado contextual, edición por chat y modo agente para refactorizar múltiples archivos. Plan Hobby gratuito con solicitudes limitadas.<br>
+                <a href="https://cursor.com" target="_blank" rel="noopener">https://cursor.com</a>
+              </li>
+              <li>
+                <strong>DeepSeek</strong> — Asistente de IA conversacional y de razonamiento de DeepSeek. Destaca en programación, matemáticas y análisis de textos largos, con un modelo gratuito muy competitivo y sin límites estrictos de mensajes.<br>
+                <a href="https://chat.deepseek.com" target="_blank" rel="noopener">https://chat.deepseek.com</a>
+              </li>
+              <li>
+                <strong>ElevenLabs</strong> — Síntesis de voz de alta calidad y clonación de voz. Plan gratuito: 10,000 caracteres al mes y 3 clones de voz, solo para uso no comercial.<br>
+                <a href="https://elevenlabs.io" target="_blank" rel="noopener">https://elevenlabs.io</a>
+              </li>
+              <li>
+                <strong>GitHub Copilot</strong> — Asistente de programación integrado en VS Code y otros editores. Ofrece autocompletado y chat con IA. Plan gratuito: 2,000 completados y 50 solicitudes premium al mes.<br>
+                <a href="https://github.com/features/copilot" target="_blank" rel="noopener">https://github.com/features/copilot</a>
+              </li>
+              <li>
+                <strong>Google Gemini</strong> — Asistente de Google integrado con Gmail, Drive y YouTube. Destaca en investigación, resumen de documentos largos y generación de imágenes (Nano Banana). Plan gratuito con límites diarios.<br>
+                <a href="https://gemini.google.com" target="_blank" rel="noopener">https://gemini.google.com</a>
+              </li>
+              <li>
+                <strong>Leonardo.Ai</strong> — Generador de imágenes con control artístico avanzado (Image Guidance, modelos personalizados). Plan gratuito: 150 tokens rápidos al día, con uso comercial permitido.<br>
+                <a href="https://leonardo.ai" target="_blank" rel="noopener">https://leonardo.ai</a>
+              </li>
+              <li>
+                <strong>Meshy</strong> — Generación de modelos 3D a partir de texto o imagen, con texturas y plugins para Blender/Unity/Unreal. Plan gratuito: 200 créditos al mes (aproximadamente 20 modelos), solo para uso no comercial.<br>
+                <a href="https://www.meshy.ai" target="_blank" rel="noopener">https://www.meshy.ai</a>
+              </li>
+              <li>
+                <strong>NotebookLM</strong> — Herramienta de Google que trabaja exclusivamente con los documentos que tú subes (PDFs, webs, videos). Genera resúmenes, mapas mentales y responde preguntas citando las fuentes. Gratis con hasta 100 cuadernos y 50 fuentes por cuaderno.<br>
+                <a href="https://notebooklm.google.com" target="_blank" rel="noopener">https://notebooklm.google.com</a>
+              </li>
+              <li>
+                <strong>Perplexity</strong> — Motor de búsqueda con IA que ofrece respuestas con citas y enlaces a fuentes. Ideal para investigación rápida y verificable. Tiene nivel gratuito con búsquedas ilimitadas y funciones avanzadas limitadas.<br>
+                <a href="https://www.perplexity.ai" target="_blank" rel="noopener">https://www.perplexity.ai</a>
+              </li>
+              <li>
+                <strong>Suno</strong> — Generador de canciones completas con voces e instrumentales a partir de texto. Plan gratuito: 50 créditos diarios (aproximadamente 10 canciones), aunque los resultados no son para uso comercial.<br>
+                <a href="https://suno.com" target="_blank" rel="noopener">https://suno.com</a>
+              </li>
+            </ul>
           </div>
         </div>
       </section>
