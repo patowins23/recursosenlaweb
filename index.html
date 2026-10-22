@@ -690,27 +690,6 @@
         <div class="recursos-scroll" id="recursos-scroll">
           <div class="recursos-inner">
             <h2 class="recursos-title" id="recursos-title">Recursos</h2>
-            <p class="recursos-sub">
-              Herramientas, guías y material seleccionado para ayudarte a entrar en flow y mantener tu atención enfocada.
-            </p>
-
-            <div class="recursos-grid">
-              <a href="#" class="recurso-card">
-                <span class="tag">Guía</span>
-                <h3>El arte del deep work</h3>
-                <p>Principios prácticos para sesiones de concentración profunda de 90 minutos.</p>
-              </a>
-              <a href="#" class="recurso-card">
-                <span class="tag">Herramienta</span>
-                <h3>Focus timer</h3>
-                <p>Un temporizador minimalista diseñado para no romper tu estado de flow.</p>
-              </a>
-              <a href="#" class="recurso-card">
-                <span class="tag">Lectura</span>
-                <h3>Diseñando tu entorno</h3>
-                <p>Cómo reducir la fricción y las distracciones digitales en tu espacio de trabajo.</p>
-              </a>
-            </div>
 
             <h3 class="tools-heading">Herramientas de IA gratuitas</h3>
             <p class="tools-sub">Una selección de asistentes, generadores y utilidades con IA que puedes usar sin pagar.</p>
@@ -1666,7 +1645,7 @@
     }
   </script>
 
-  <!-- Init + reveal + FULLPAGE scroll logic (idéntico a tu código que funciona) -->
+  <!-- Init + reveal + FULLPAGE scroll logic -->
   <script>
     (function() {
       const canvas = document.getElementById('fluid-canvas');
@@ -1718,35 +1697,18 @@
       if (form) form.addEventListener('submit', e => e.preventDefault());
 
       const recursosTitle = document.getElementById('recursos-title');
-      const recursosSub = document.querySelector('.recursos-sub');
-      const recursoCards = document.querySelectorAll('.recurso-card');
 
       if (recursosTitle) {
         recursosTitle.style.opacity = '0';
         recursosTitle.style.transform = 'translateY(1.5rem)';
         recursosTitle.style.transition = 'opacity 700ms cubic-bezier(0.2,0,0,1), transform 700ms cubic-bezier(0.2,0,0,1)';
       }
-      if (recursosSub) {
-        recursosSub.style.opacity = '0';
-        recursosSub.style.transform = 'translateY(1rem)';
-        recursosSub.style.transition = 'opacity 700ms cubic-bezier(0.2,0,0,1), transform 700ms cubic-bezier(0.2,0,0,1)';
-      }
-      recursoCards.forEach((card, i) => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(1.5rem)';
-        card.style.transition = 'opacity 700ms cubic-bezier(0.2,0,0,1), transform 700ms cubic-bezier(0.2,0,0,1)';
-        card.style.transitionDelay = `${i * 120}ms`;
-      });
 
       let recursosRevealed = false;
       function revealRecursos() {
         if (recursosRevealed) return;
         recursosRevealed = true;
         if (recursosTitle) { recursosTitle.style.opacity = '1'; recursosTitle.style.transform = 'translateY(0)'; }
-        if (recursosSub) setTimeout(() => { recursosSub.style.opacity = '1'; recursosSub.style.transform = 'translateY(0)'; }, 150);
-        recursoCards.forEach((card, i) => {
-          setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, 300 + i * 120);
-        });
       }
 
       const scrollHint = document.querySelector('.scroll-hint');
@@ -1883,7 +1845,7 @@
     })();
   </script>
 
-  <!-- ⭐ SISTEMA DE ESTRELLAS — IIFE separado y protegido -->
+  <!-- SISTEMA DE ESTRELLAS -->
   <script>
     (function initStarRatings() {
       try {
